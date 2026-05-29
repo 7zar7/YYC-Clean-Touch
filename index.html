@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YYC Clean Touch — Professional Cleaning Services in Calgary</title>
+  <meta name="description" content="Calgary's most meticulous residential cleaning. Licensed, bonded, WCB covered. Regular, deep, move-in/out cleaning plus auto detailing. Get a free estimate today.">
+  <meta property="og:title" content="YYC Clean Touch — Calgary Cleaning Services">
+  <meta property="og:description" content="So clean, even the Calgary geese would wipe their feet.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./photos/og-image.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <link rel="preload" href="main.js" as="script">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo" aria-label="YYC Clean Touch home">
+      <span class="nav-logo-mark">✦</span>
+      <span class="nav-logo-text">YYC Clean Touch</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#detailing">Auto Detailing</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#booking" class="nav-cta">Get a Free Quote</a></li>
+    </ul>
+    <button class="nav-burger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <ul role="list">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#detailing">Auto Detailing</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#booking">Get a Free Quote</a></li>
+    </ul>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <canvas id="blobCanvas" aria-hidden="true"></canvas>
+    <div class="hero-display" aria-hidden="true">CLEAN</div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        So clean, even the Calgary geese would wipe their feet.
+      </div>
+
+      <h1 class="hero-h1">
+        Professional Cleaning<br>
+        <em>Services in Calgary</em>
+      </h1>
+
+      <p class="hero-sub">
+        Calgary's most meticulous residential care. Fully licensed, bonded,
+        and ready to apologize if we clean too perfectly.
+        <span class="hero-sub-aside">(We are Canadian, after all.)</span>
+      </p>
+
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-primary">
+          Get a Free Estimate — Fast &amp; Friendly ↓
+        </a>
+        <a href="#services" class="btn btn-ghost">See Our Services</a>
+      </div>
+
+      <!-- ── STATS BAR (replaces simple trust-bar) ── -->
+      <div class="hero-stats" role="list" aria-label="Our track record">
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-number" data-target="847">0</span>
+          <span class="hero-stat-label">Cleans completed</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-number">4.9<span class="hero-stat-unit">★</span></span>
+          <span class="hero-stat-label">Average rating</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-number">0</span>
+          <span class="hero-stat-label">Missed appointments</span>
+        </div>
+        <div class="hero-stat-divider" aria-hidden="true"></div>
+        <div class="hero-stat" role="listitem">
+          <span class="hero-stat-number">5</span>
+          <span class="hero-stat-label">Years in Calgary</span>
+        </div>
+      </div>
+
+      <div class="trust-bar" role="list">
+        <div class="trust-item" role="listitem">
+          <span class="trust-check" aria-hidden="true">✓</span>
+          Licensed &amp; Bonded
+        </div>
+        <div class="trust-item" role="listitem">
+          <span class="trust-check" aria-hidden="true">✓</span>
+          WCB Covered
+        </div>
+        <div class="trust-item" role="listitem">
+          <span class="trust-check" aria-hidden="true">✓</span>
+          100% Happiness Guaranteed
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── P-19 PAUSE ── -->
+  <section class="pause-section" aria-label="Tagline">
+    <p class="pause-text">
+      Your home, <em>restored to its best.</em>
+    </p>
+  </section>
+
+  <!-- ── SERVICES ── -->
+  <section id="services" class="section-light">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">What We Do</span>
+        <h2>Every corner.<br><em>Every time.</em></h2>
+        <p class="section-sub">From a quick refresh to a full deep-clean, we've got you covered. No judgment on the state of your home — that's literally our job.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <article class="service-card service-card--tall reveal">
+          <div class="service-card-img" style="background:#c9dfe8;">
+            <div class="service-card-img-placeholder">🏠</div>
+          </div>
+          <div class="service-card-body">
+            <span class="card-eyebrow">Most Popular</span>
+            <h3>Regular Cleaning</h3>
+            <p>Weekly, bi-weekly, or monthly — your home stays spotless on your schedule. We remember where things go. Promise.</p>
+            <ul class="service-list">
+              <li>All rooms dusted &amp; vacuumed</li>
+              <li>Kitchen &amp; bathrooms sanitized</li>
+              <li>Floors mopped</li>
+              <li>Surfaces wiped down</li>
+            </ul>
+            <a href="#booking" class="card-link">Book Regular Cleaning →</a>
+          </div>
+        </article>
+
+        <article class="service-card service-card--arch reveal">
+          <div class="service-card-img service-card-img--arch" style="background:#daeada;">
+            <div class="service-card-img-placeholder">✨</div>
+          </div>
+          <div class="service-card-body">
+            <span class="card-eyebrow">Most Thorough</span>
+            <h3>Deep Cleaning</h3>
+            <p>When regular just won't cut it. We go where no mop has gone before.</p>
+            <ul class="service-list">
+              <li>Inside appliances (oven, fridge)</li>
+              <li>Baseboards &amp; window sills</li>
+              <li>Cabinet interiors</li>
+              <li>Light fixtures &amp; vents</li>
+            </ul>
+            <a href="#booking" class="card-link">Book Deep Clean →</a>
+          </div>
+        </article>
+
+        <article class="service-card service-card--square reveal">
+          <div class="service-card-img" style="background:#e8e0d5;">
+            <div class="service-card-img-placeholder">📦</div>
+          </div>
+          <div class="service-card-body">
+            <span class="card-eyebrow">Moving?</span>
+            <h3>Move-In / Move-Out</h3>
+            <p>Leave the old place spotless. Start the new one fresh. Landlords love us — which means you get your deposit back.</p>
+            <a href="#booking" class="card-link">Book Move Cleaning →</a>
+          </div>
+        </article>
+
+        <article class="service-card service-card--wide reveal">
+          <div class="service-card-img service-card-img--wide" style="background:#d5dde8;">
+            <div class="service-card-img-placeholder">🏗️</div>
+          </div>
+          <div class="service-card-body">
+            <span class="card-eyebrow">Construction</span>
+            <h3>Post-Construction Cleanup</h3>
+            <p>Renovation dust is a special kind of chaos. We handle it — so you can actually enjoy the reno you just paid for.</p>
+            <a href="#booking" class="card-link">Get a Custom Quote →</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="upsells reveal">
+        <p class="upsells-label">Add to any booking</p>
+        <div class="upsell-pills">
+          <span class="upsell-pill">+ Inside Oven</span>
+          <span class="upsell-pill">+ Inside Fridge</span>
+          <span class="upsell-pill">+ Interior Windows</span>
+          <span class="upsell-pill">+ Laundry &amp; Folding</span>
+          <span class="upsell-pill">+ Closet Organizing</span>
+          <span class="upsell-pill">+ Wall Spot-Cleaning</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SUBSCRIPTION PLANS ── -->
+  <section id="plans" class="section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Cleaning Plans</span>
+        <h2>Set it.<br><em>Forget it.</em></h2>
+        <p class="section-sub">Save money, skip the scheduling hassle. Our plans lock in your rate and keep your home consistently clean. Very Canadian of you, honestly.</p>
+      </div>
+
+      <div class="plans-grid">
+
+        <article class="plan-card reveal">
+          <div class="plan-header">
+            <span class="plan-name">Bronze</span>
+            <span class="plan-freq">Monthly</span>
+          </div>
+          <div class="plan-price">
+            <span class="plan-from">from</span>
+            <span class="plan-amount">$149</span>
+            <span class="plan-per">/visit</span>
+          </div>
+          <ul class="plan-features">
+            <li>1 visit/month</li>
+            <li>Standard cleaning</li>
+            <li>Same team every time</li>
+            <li>Easy rescheduling</li>
+          </ul>
+          <a href="#booking" class="btn btn-outline">Start Bronze</a>
+        </article>
+
+        <article class="plan-card plan-card--featured reveal">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-header">
+            <span class="plan-name">Silver</span>
+            <span class="plan-freq">Bi-Weekly</span>
+          </div>
+          <div class="plan-price">
+            <span class="plan-from">from</span>
+            <span class="plan-amount">$129</span>
+            <span class="plan-per">/visit</span>
+          </div>
+          <p class="plan-saving">Save ~10% vs one-time</p>
+          <ul class="plan-features">
+            <li>2 visits/month</li>
+            <li>Standard cleaning</li>
+            <li>Same team every time</li>
+            <li>Priority scheduling</li>
+            <li>1 free upsell/quarter</li>
+          </ul>
+          <a href="#booking" class="btn btn-primary">Start Silver</a>
+        </article>
+
+        <article class="plan-card reveal">
+          <div class="plan-header">
+            <span class="plan-name">Gold</span>
+            <span class="plan-freq">Weekly</span>
+          </div>
+          <div class="plan-price">
+            <span class="plan-from">from</span>
+            <span class="plan-amount">$109</span>
+            <span class="plan-per">/visit</span>
+          </div>
+          <p class="plan-saving">Save ~15% vs one-time</p>
+          <ul class="plan-features">
+            <li>4 visits/month</li>
+            <li>Standard + deep rotation</li>
+            <li>Dedicated team</li>
+            <li>Priority scheduling</li>
+            <li>2 free upsells/quarter</li>
+            <li>Annual deep clean included</li>
+          </ul>
+          <a href="#booking" class="btn btn-outline">Start Gold</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRICE CALCULATOR ── -->
+  <section id="calculator" class="section-light">
+    <div class="container container--narrow">
+      <div class="section-header reveal">
+        <span class="eyebrow">Instant Estimate</span>
+        <h2>What will it<br><em>actually cost?</em></h2>
+        <p class="section-sub">Get a ballpark in 10 seconds. No email required. We'll confirm the exact price before we start.</p>
+      </div>
+
+      <div class="calc-card reveal" id="priceCalc">
+
+        <!-- Row 1: Service type -->
+        <div class="calc-row">
+          <p class="calc-row-label">What type of cleaning?</p>
+          <div class="calc-options" id="calcType">
+            <button class="calc-opt calc-opt--active" data-type="regular">Regular</button>
+            <button class="calc-opt" data-type="deep">Deep Clean</button>
+            <button class="calc-opt" data-type="moveinout">Move-In/Out</button>
+            <button class="calc-opt" data-type="postconstruction">Post-Construction</button>
+          </div>
+        </div>
+
+        <!-- Row 2: Bedrooms -->
+        <div class="calc-row">
+          <p class="calc-row-label">How many bedrooms?</p>
+          <div class="calc-stepper">
+            <button class="calc-step-btn" id="bedroomMinus" aria-label="Remove bedroom">−</button>
+            <span class="calc-step-val" id="bedroomCount">2</span>
+            <button class="calc-step-btn" id="bedroomPlus" aria-label="Add bedroom">+</button>
+            <span class="calc-step-hint">bedrooms</span>
+          </div>
+        </div>
+
+        <!-- Row 3: Bathrooms -->
+        <div class="calc-row">
+          <p class="calc-row-label">How many bathrooms?</p>
+          <div class="calc-stepper">
+            <button class="calc-step-btn" id="bathroomMinus" aria-label="Remove bathroom">−</button>
+            <span class="calc-step-val" id="bathroomCount">1</span>
+            <button class="calc-step-btn" id="bathroomPlus" aria-label="Add bathroom">+</button>
+            <span class="calc-step-hint">bathrooms</span>
+          </div>
+        </div>
+
+        <!-- Row 4: Frequency -->
+        <div class="calc-row">
+          <p class="calc-row-label">How often?</p>
+          <div class="calc-options" id="calcFreq">
+            <button class="calc-opt" data-freq="onetime">One-time</button>
+            <button class="calc-opt calc-opt--active" data-freq="monthly">Monthly</button>
+            <button class="calc-opt" data-freq="biweekly">Bi-weekly</button>
+            <button class="calc-opt" data-freq="weekly">Weekly</button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="calc-result" id="calcResult">
+          <div class="calc-result-inner">
+            <div class="calc-price-block">
+              <span class="calc-price-label">Estimated price</span>
+              <span class="calc-price" id="calcPrice">$189</span>
+              <span class="calc-price-per" id="calcPricePer">/visit</span>
+            </div>
+            <div class="calc-savings-block" id="calcSavings">
+              <!-- populated by JS -->
+            </div>
+          </div>
+          <a href="#booking" class="btn btn-primary calc-cta" id="calcCta">
+            Book This Clean →
+          </a>
+          <p class="calc-disclaimer">Exact price confirmed before we start. No surprises.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AUTO DETAILING ── -->
+  <section id="detailing" class="section-dark">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow eyebrow--light">Auto Detailing</span>
+        <h2 class="h2-light">Showroom finish.<br><em>Calgary price.</em></h2>
+        <p class="section-sub section-sub--light">Your home isn't the only thing that deserves attention. We bring the same precision to your vehicle. Yes, even after Chinook season.</p>
+      </div>
+
+      <div class="detailing-grid">
+
+        <article class="detailing-card reveal">
+          <div class="detailing-icon" aria-hidden="true">🚗</div>
+          <h3>Interior Detail</h3>
+          <p>Full vacuum, steam-clean, leather conditioning, odour elimination. Basically therapy for your car.</p>
+          <span class="detailing-price">from $120</span>
+          <a href="#booking" class="btn btn-light">Book Interior Detail</a>
+        </article>
+
+        <article class="detailing-card detailing-card--featured reveal">
+          <div class="detailing-icon" aria-hidden="true">✦</div>
+          <h3>Full Detail</h3>
+          <p>Interior + exterior wash, clay bar, polish, wax. Your car will look better than the day you bought it. (Results may vary for 2007 Corollas.)</p>
+          <span class="detailing-price">from $220</span>
+          <a href="#booking" class="btn btn-primary">Book Full Detail</a>
+        </article>
+
+        <article class="detailing-card reveal">
+          <div class="detailing-icon" aria-hidden="true">💨</div>
+          <h3>Odour Treatment</h3>
+          <p>Ozone treatment + deep clean. For when you can't quite explain the smell and you'd rather not try.</p>
+          <span class="detailing-price">from $80</span>
+          <a href="#booking" class="btn btn-light">Book Odour Treatment</a>
+        </article>
+
+      </div>
+
+      <p class="detailing-note reveal">Bundle your home cleaning with auto detailing and save 10% on both. <a href="#booking" class="link-light">Ask us how →</a></p>
+
+    </div>
+  </section>
+
+  <!-- ── WHY US / TEAM ── -->
+  <section id="about" class="section-light section-editorial">
+    <div class="editorial-split">
+
+      <div class="editorial-text reveal">
+        <span class="eyebrow">Why YYC Clean Touch</span>
+        <h2>We treat your home<br><em>like it's ours.</em></h2>
+        <p>Started in Calgary, built on referrals. Every person on our team is background-checked, trained, and genuinely cares about doing the job right. We're not the cheapest option in town — but we're the one your neighbours keep recommending.</p>
+        <ul class="about-list">
+          <li><span class="about-check" aria-hidden="true">✓</span> Fully licensed &amp; bonded in Alberta</li>
+          <li><span class="about-check" aria-hidden="true">✓</span> WCB covered — you're protected</li>
+          <li><span class="about-check" aria-hidden="true">✓</span> Background-checked team</li>
+          <li><span class="about-check" aria-hidden="true">✓</span> Eco-friendly products available</li>
+          <li><span class="about-check" aria-hidden="true">✓</span> Satisfaction guarantee — we come back if something's off</li>
+        </ul>
+        <a href="#booking" class="btn btn-primary">Book Your First Clean</a>
+      </div>
+
+      <!-- Team photo grid replacing placeholder -->
+      <div class="editorial-image" aria-hidden="false">
+        <div class="editorial-image-inner">
+          <div class="team-grid">
+            <!-- Replace src values with real photos when available -->
+            <div class="team-member">
+              <div class="team-photo team-photo--1">
+                <div class="team-photo-placeholder">
+                  <span class="team-initials">AK</span>
+                </div>
+              </div>
+              <div class="team-info">
+                <strong>Anna K.</strong>
+                <span>Lead Cleaner · 4 yrs</span>
+              </div>
+            </div>
+            <div class="team-member">
+              <div class="team-photo team-photo--2">
+                <div class="team-photo-placeholder">
+                  <span class="team-initials">MS</span>
+                </div>
+              </div>
+              <div class="team-info">
+                <strong>Mark S.</strong>
+                <span>Deep Clean Specialist</span>
+              </div>
+            </div>
+            <div class="team-member">
+              <div class="team-photo team-photo--3">
+                <div class="team-photo-placeholder">
+                  <span class="team-initials">JL</span>
+                </div>
+              </div>
+              <div class="team-info">
+                <strong>Julia L.</strong>
+                <span>Move-Out Expert</span>
+              </div>
+            </div>
+            <div class="team-member team-member--wide">
+              <div class="team-photo-wide">
+                <div class="team-photo-placeholder team-photo-placeholder--wide">
+                  <span>📸 Add your team photo here</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rotating-badge" aria-label="100% satisfaction guaranteed">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+              <path id="circle-text" d="M 60,60 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"/>
+            </defs>
+            <text class="badge-text-path">
+              <textPath href="#circle-text" startOffset="0%">★ CALGARY'S FAVOURITE ★ SINCE 2020 ★ YYC CLEAN TOUCH ★</textPath>
+            </text>
+          </svg>
+          <span class="badge-center-icon" aria-hidden="true">✦</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ── -->
+  <section id="testimonials" class="section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">What Calgary Says</span>
+        <h2>Don't take our word for it.<br><em>Take theirs.</em></h2>
+      </div>
+
+      <div class="testimonials-grid">
+
+        <article class="testimonial-card reveal">
+          <div class="testimonial-banner" style="background:#c9dfe8;"></div>
+          <div class="testimonial-body">
+            <div class="testimonial-avatar">SK</div>
+            <div class="testimonial-meta">
+              <strong>Sarah K.</strong>
+              <span>Beltline, Calgary</span>
+            </div>
+          </div>
+          <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+          <blockquote>"I came home and literally gasped. My baseboards have never looked like that. I didn't even know that was possible."</blockquote>
+          <div class="testimonial-stats">
+            <div class="stat-item"><span class="stat-val">2 yrs</span><span class="stat-label">customer</span></div>
+            <div class="stat-item"><span class="stat-val">Silver</span><span class="stat-label">plan</span></div>
+            <div class="stat-item"><span class="stat-val">5.0</span><span class="stat-label">rating</span></div>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal">
+          <div class="testimonial-banner" style="background:#daeada;"></div>
+          <div class="testimonial-body">
+            <div class="testimonial-avatar">MR</div>
+            <div class="testimonial-meta">
+              <strong>Mike R.</strong>
+              <span>Kensington, Calgary</span>
+            </div>
+          </div>
+          <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+          <blockquote>"Used them for move-out. Got my full deposit back. Worth every penny — and I mean that as a very satisfied Albertan."</blockquote>
+          <div class="testimonial-stats">
+            <div class="stat-item"><span class="stat-val">Move-out</span><span class="stat-label">service</span></div>
+            <div class="stat-item"><span class="stat-val">$600</span><span class="stat-label">deposit saved</span></div>
+            <div class="stat-item"><span class="stat-val">5.0</span><span class="stat-label">rating</span></div>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal">
+          <div class="testimonial-banner" style="background:#e8e0d5;"></div>
+          <div class="testimonial-body">
+            <div class="testimonial-avatar">JL</div>
+            <div class="testimonial-meta">
+              <strong>Jennifer L.</strong>
+              <span>Signal Hill, Calgary</span>
+            </div>
+          </div>
+          <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+          <blockquote>"They did my home AND my SUV the same day. Honestly felt like cheating — everything clean at once. 10/10 would recommend."</blockquote>
+          <div class="testimonial-stats">
+            <div class="stat-item"><span class="stat-val">Gold</span><span class="stat-label">plan</span></div>
+            <div class="stat-item"><span class="stat-val">+ Auto</span><span class="stat-label">bundle</span></div>
+            <div class="stat-item"><span class="stat-val">5.0</span><span class="stat-label">rating</span></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BOOKING FORM ── -->
+  <section id="booking" class="section-light">
+    <div class="container container--narrow">
+      <div class="section-header reveal">
+        <span class="eyebrow">Get Started</span>
+        <h2>Book your clean.<br><em>We'll handle the rest.</em></h2>
+        <p class="section-sub">Takes 60 seconds. We'll follow up within 2 hours — by phone or email, whichever you prefer. No spam. We're Canadian.</p>
+      </div>
+
+      <div class="booking-form reveal" id="bookingForm">
+
+        <div class="form-step" id="formStep1">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="f-name">Name</label>
+              <input type="text" id="f-name" name="name" placeholder="Jane Smith" autocomplete="name" required>
+            </div>
+            <div class="form-field">
+              <label for="f-phone">Phone</label>
+              <input type="tel" id="f-phone" name="phone" placeholder="403-555-0100" autocomplete="tel">
+            </div>
+            <div class="form-field form-field--full">
+              <label for="f-email">Email</label>
+              <input type="email" id="f-email" name="email" placeholder="jane@example.com" autocomplete="email" required>
+            </div>
+            <div class="form-field form-field--full">
+              <label for="f-service">What do you need?</label>
+              <select id="f-service" name="service" required>
+                <option value="" disabled selected>Choose a service…</option>
+                <optgroup label="Home Cleaning">
+                  <option value="regular">Regular Cleaning</option>
+                  <option value="deep">Deep Cleaning</option>
+                  <option value="movein">Move-In Cleaning</option>
+                  <option value="moveout">Move-Out Cleaning</option>
+                  <option value="postconstruction">Post-Construction Cleanup</option>
+                </optgroup>
+                <optgroup label="Cleaning Plans">
+                  <option value="bronze">Bronze Plan (Monthly)</option>
+                  <option value="silver">Silver Plan (Bi-Weekly)</option>
+                  <option value="gold">Gold Plan (Weekly)</option>
+                </optgroup>
+                <optgroup label="Auto Detailing">
+                  <option value="interior-detail">Interior Detail</option>
+                  <option value="full-detail">Full Detail</option>
+                  <option value="odour">Odour Treatment</option>
+                </optgroup>
+                <option value="bundle">Home + Auto Bundle</option>
+                <option value="other">Something else (tell us below)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-action-bar">
+            <button type="button" class="btn btn-ghost btn-sm" id="btnClear">
+              Clear
+              <span class="btn-sub">(No judgment)</span>
+            </button>
+            <button type="button" class="btn btn-primary" id="btnNext">
+              Next — Choose Contact Preference →
+            </button>
+          </div>
+        </div>
+
+        <div class="form-step form-step--hidden" id="formStep2">
+          <p class="step2-label">How should we reach you?</p>
+          <div class="contact-choice">
+            <button type="button" class="choice-btn" id="choiceCall">
+              <span class="choice-icon" aria-hidden="true">📞</span>
+              <strong>Call me</strong>
+              <span>We'll call within 2 hours</span>
+            </button>
+            <button type="button" class="choice-btn" id="choiceEmail">
+              <span class="choice-icon" aria-hidden="true">✉️</span>
+              <strong>Email me</strong>
+              <span>Get a detailed quote by email</span>
+            </button>
+          </div>
+
+          <div class="form-action-bar">
+            <button type="button" class="btn btn-ghost btn-sm" id="btnBack">← Back</button>
+            <button type="button" class="btn btn-primary" id="btnSubmit" disabled>Send My Request ✓</button>
+          </div>
+        </div>
+
+        <div class="form-step form-step--hidden" id="formStep3">
+          <div class="form-confirm">
+            <div class="confirm-icon" aria-hidden="true">✦</div>
+            <h3>You're all set!</h3>
+            <p>We'll be in touch within 2 hours. In the meantime, feel free to enjoy your (currently un-cleaned) home with zero guilt. That's what we're here for.</p>
+            <a href="#services" class="btn btn-ghost btn-sm">← Back to Services</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo" aria-label="YYC Clean Touch home">
+          <span class="nav-logo-mark">✦</span>
+          <span class="nav-logo-text">YYC Clean Touch</span>
+        </a>
+        <p class="footer-tagline">Calgary's most meticulous cleaning service.<br>Fully licensed. Genuinely Canadian.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+          </a>
+          <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Regular Cleaning</a></li>
+            <li><a href="#services">Deep Cleaning</a></li>
+            <li><a href="#services">Move-In / Move-Out</a></li>
+            <li><a href="#services">Post-Construction</a></li>
+            <li><a href="#detailing">Auto Detailing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Plans</h4>
+          <ul>
+            <li><a href="#plans">Bronze (Monthly)</a></li>
+            <li><a href="#plans">Silver (Bi-Weekly)</a></li>
+            <li><a href="#plans">Gold (Weekly)</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:12049519956">1204-951-9956</a></li>
+            <li><a href="mailto:yyctoughcleaning@gmail.com">yyctoughcleaning@gmail.com</a></li>
+            <li>Calgary, AB</li>
+          </ul>
+          <div class="footer-hours">
+            <p>Mon–Fri: 9am – 7pm</p>
+            <p>Weekends: Closed</p>
+            <p class="footer-hours-aside">(We rest so we can do better work. Very Canadian.)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 YYC Clean Touch. Calgary, AB.</p>
+      <div class="footer-legal">
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms-and-conditions">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
