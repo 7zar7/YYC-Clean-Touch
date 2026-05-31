@@ -747,13 +747,16 @@ h2 em { font-style: italic; color: var(--accent); }
 .about-check { color: var(--accent); font-size: 0.85rem; flex-shrink: 0; }
 
 .editorial-image {
-  position: relative; overflow: visible;
-  margin-right: -100px;
-  padding-top: clamp(2rem, 4vw, 4rem);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--bg-alt);
 }
 .editorial-image-inner {
-  position: absolute; inset: 0; right: 0;
-  border-radius: var(--r-lg) 0 0 var(--r-lg); overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-lg);
+  overflow: hidden;
   background: var(--bg-alt);
 }
 
@@ -804,10 +807,7 @@ h2 em { font-style: italic; color: var(--accent); }
 
 /* Rotating badge */
 .rotating-badge {
-  position: relative; bottom: 15%; left: -50px;
-  width: 120px; height: 120px;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 0;
+  display: none;
 }
 .rotating-badge svg {
   position: absolute; width: 100%; height: 100%;
