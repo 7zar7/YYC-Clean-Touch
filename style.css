@@ -756,10 +756,9 @@ h2 em { font-style: italic; color: var(--accent); }
 
 /* ── TEAM GRID (new — replaces placeholder) ── */
 .team-grid {
-  width: 100%; height: 100%;
+  width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr auto;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   padding: 1.5rem;
 }
@@ -768,36 +767,16 @@ h2 em { font-style: italic; color: var(--accent); }
   flex-direction: column;
   gap: 8px;
 }
-.team-member--wide {
-  grid-column: span 2;
-}
 .team-photo {
   width: 100%;
   aspect-ratio: 3/4;
   border-radius: var(--r-lg);
   overflow: hidden;
 }
-.team-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 8px;
-  font-size: 0.75rem; color: var(--text-light);
-}
-/* Each team member has a subtle unique background tint */
-.team-photo--1 .team-photo-placeholder { background: #c9dfe8; }
-.team-photo--2 .team-photo-placeholder { background: #daeada; }
-.team-photo--3 .team-photo-placeholder { background: #e8e0d5; }
 .team-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
-}
-.team-initials {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  opacity: 0.6;
 }
 .team-info strong {
   display: block;
@@ -808,20 +787,6 @@ h2 em { font-style: italic; color: var(--accent); }
 .team-info span {
   font-size: 0.75rem;
   color: var(--text-light);
-}
-.team-photo-wide {
-  width: 100%;
-  height: 280px;
-  border-radius: var(--r-md);
-  overflow: hidden;
-}
-.team-photo-wide img { object-fit: cover; object-position: center 20%; }
-.team-photo-placeholder--wide {
-  background: var(--bg-alt);
-  border: 2px dashed var(--border);
-  font-size: 0.78rem;
-  color: var(--text-light);
-  font-style: italic;
 }
 
 /* Rotating badge */
