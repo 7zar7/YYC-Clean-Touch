@@ -771,12 +771,12 @@ h2 em { font-style: italic; color: var(--accent); }
 /* ── TESTIMONIALS ── */
 .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .testimonial-card {
-  background: var(--white); border-radius: var(--r-lg);
+  background: var(--white); border-radius: 200px 200px var(--r-lg) var(--r-lg);
   border: 1px solid var(--border); overflow: hidden;
   transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
 }
 .testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(10,35,35,0.08); }
-.testimonial-banner { height: 80px; }
+.testimonial-banner { height: 120px; }
 .testimonial-body {
   display: flex; align-items: center; gap: 12px;
   padding: 0 1.5rem; margin-top: -24px; position: relative; z-index: 1;
