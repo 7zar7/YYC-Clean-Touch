@@ -792,12 +792,11 @@ h2 em { font-style: italic; color: var(--accent); }
   grid-column: span 3;
   border-radius: var(--r-lg);
   overflow: hidden;
-  height: 200px;
 }
 .team-group-photo img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Rotating badge */
