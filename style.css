@@ -404,7 +404,8 @@ h2 em { font-style: italic; color: var(--accent); }
 .upsell-pill:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── PLANS ── */
-.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.plans-carousel { overflow: hidden; padding: 1.5rem 0.5rem; margin: -1.5rem -0.5rem; }
+.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; transition: transform 0.4s var(--ease-out); }
 .plan-card {
   background: var(--white); border-radius: var(--r-lg);
   border: 1.5px solid var(--border); padding: 2rem 1.75rem;
@@ -413,6 +414,42 @@ h2 em { font-style: italic; color: var(--accent); }
 }
 .plan-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(10,35,35,0.08); }
 .plan-card--featured { border-color: var(--accent); }
+.plan-card--active { transform: scale(1.05); z-index: 2; box-shadow: 0 12px 40px rgba(10,35,35,0.08); }
+.plan-card--active:hover { transform: scale(1.05) translateY(-4px); }
+
+/* Plans navigation (arrows + dots) */
+.plans-nav {
+  display: flex; align-items: center; justify-content: center; gap: 1.25rem;
+  margin-top: 2.75rem;
+}
+.plans-arrow {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.plans-arrow:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.plans-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+.plans-dots { display: flex; align-items: center; gap: 10px; }
+.plans-dot {
+  width: 9px; height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(91, 158, 201, 0.3);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.plans-dot:hover { transform: scale(1.2); }
+.plans-dot--active {
+  background: var(--accent);
+  transform: scale(1.35);
+}
 .plan-badge {
   position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
   background: var(--accent); color: var(--white);
@@ -932,7 +969,16 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
   .service-card--wide { flex-direction: column; }
   .service-card-img--wide { width: 100%; aspect-ratio: 4/3; }
 
-  .plans-grid { grid-template-columns: 1fr; }
+  /* Mobile: convert plans into a slide track (one card at a time) */
+  .plans-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+  }
+  .plans-grid .plan-card { min-width: 100%; flex-shrink: 0; }
+  .plans-grid .plan-card--active { transform: none; box-shadow: none; }
+  .plans-grid .plan-card--active:hover { transform: translateY(-4px); }
+
   .detailing-grid { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
 

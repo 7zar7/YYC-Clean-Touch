@@ -464,6 +464,60 @@ function initCalculator() {
   }
 })();
 
+// ── 15.3 PLANS CAROUSEL ──
+function initPlansCarousel() {
+  const track = document.querySelector('.plans-grid');
+  const cards = track ? track.querySelectorAll('.plan-card') : [];
+  const dots  = document.querySelectorAll('.plans-dot');
+  const prev  = document.querySelector('.plans-arrow--prev');
+  const next  = document.querySelector('.plans-arrow--next');
+  if (!track || !cards.length) return;
+
+  const mobileMQ = window.matchMedia('(max-width: 768px)');
+  let activeIdx = 1; // Silver default
+
+  function update() {
+    cards.forEach((c, i) => c.classList.toggle('plan-card--active', i === activeIdx));
+    dots.forEach((d, i)  => d.classList.toggle('plans-dot--active', i === activeIdx));
+    if (mobileMQ.matches) {
+      track.style.transform = `translateX(-${activeIdx * 100}%)`;
+    } else {
+      track.style.transform = '';
+    }
+    if (prev) prev.disabled = activeIdx === 0;
+    if (next) next.disabled = activeIdx === cards.length - 1;
+  }
+
+  const setActive = (i) => {
+    activeIdx = Math.max(0, Math.min(cards.length - 1, i));
+    update();
+  };
+
+  prev && prev.addEventListener('click', () => setActive(activeIdx - 1));
+  next && next.addEventListener('click', () => setActive(activeIdx + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => setActive(i)));
+
+  // Touch swipe (mobile)
+  let startX = 0, active = false;
+  track.addEventListener('touchstart', (e) => {
+    if (!e.touches[0]) return;
+    startX = e.touches[0].clientX;
+    active = true;
+  }, { passive: true });
+  track.addEventListener('touchend', (e) => {
+    if (!active) return;
+    active = false;
+    const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
+    const dx = endX - startX;
+    if (Math.abs(dx) > 40) setActive(activeIdx + (dx < 0 ? 1 : -1));
+  });
+
+  // Sync on viewport change (mobile ↔ desktop)
+  window.addEventListener('resize', debounce(update, 150));
+
+  update();
+}
+
 // ── 15.4 STICKY CTA BAR ──
 function initStickyCTA() {
   const bar = document.getElementById('stickyCta');
@@ -566,6 +620,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalculator();
     initBeforeAfter();
     initStickyCTA();
+    initPlansCarousel();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
