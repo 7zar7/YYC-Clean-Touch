@@ -736,10 +736,11 @@ h2 em { font-style: italic; color: var(--accent); }
 }
 .team-photo-wide {
   width: 100%;
-  height: 100px;
+  height: 180px;
   border-radius: var(--r-md);
   overflow: hidden;
 }
+.team-photo-wide img { object-position: center top; }
 .team-photo-placeholder--wide {
   background: var(--bg-alt);
   border: 2px dashed var(--border);
