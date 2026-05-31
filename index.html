@@ -331,81 +331,91 @@
         <p class="section-sub">Transparent pricing, no contracts. Prices are for a 1-bed + 1-bath home and scale with size — your exact quote is confirmed when you book.</p>
       </div>
 
-      <div class="plans-carousel">
+      <div class="plans-layout">
 
-        <article class="plan-card">
-          <div class="plan-header">
-            <span class="plan-name">Bronze</span>
-            <span class="plan-freq">Monthly</span>
-          </div>
-          <div class="plan-price">
-            <span class="plan-from">from</span>
-            <span class="plan-amount">$149</span>
-            <span class="plan-per">/visit</span>
-          </div>
-          <ul class="plan-features">
-            <li>1 visit/month</li>
-            <li>Standard cleaning</li>
-            <li>Same team every time</li>
-            <li>Easy rescheduling</li>
-          </ul>
-          <a href="#booking" class="btn btn-outline">Start Bronze</a>
-        </article>
-
-        <article class="plan-card plan-card--featured plan-card--active">
-          <div class="plan-badge">Most Popular</div>
-          <div class="plan-header">
-            <span class="plan-name">Silver</span>
-            <span class="plan-freq">Bi-Weekly</span>
-          </div>
-          <div class="plan-price">
-            <span class="plan-from">from</span>
-            <span class="plan-amount">$129</span>
-            <span class="plan-per">/visit</span>
-          </div>
-          <p class="plan-saving">Save ~10% vs one-time</p>
-          <ul class="plan-features">
-            <li>2 visits/month</li>
-            <li>Standard cleaning</li>
-            <li>Same team every time</li>
-            <li>Priority scheduling</li>
-            <li>1 free upsell/quarter</li>
-          </ul>
-          <a href="#booking" class="btn btn-primary">Start Silver</a>
-        </article>
-
-        <article class="plan-card">
-          <div class="plan-header">
-            <span class="plan-name">Gold</span>
-            <span class="plan-freq">Weekly</span>
-          </div>
-          <div class="plan-price">
-            <span class="plan-from">from</span>
-            <span class="plan-amount">$109</span>
-            <span class="plan-per">/visit</span>
-          </div>
-          <p class="plan-saving">Save ~15% vs one-time</p>
-          <ul class="plan-features">
-            <li>4 visits/month</li>
-            <li>Standard + deep rotation</li>
-            <li>Dedicated team</li>
-            <li>Priority scheduling</li>
-            <li>2 free upsells/quarter</li>
-            <li>Annual deep clean included</li>
-          </ul>
-          <a href="#booking" class="btn btn-outline">Start Gold</a>
-        </article>
-
-      </div>
-
-      <div class="plans-nav" aria-label="Plans navigation">
-        <button class="plans-arrow plans-arrow--prev" aria-label="Previous plan">←</button>
-        <div class="plans-dots" role="tablist">
-          <button class="plans-dot"                       data-idx="0" aria-label="Bronze plan"></button>
-          <button class="plans-dot plans-dot--active"     data-idx="1" aria-label="Silver plan"></button>
-          <button class="plans-dot"                       data-idx="2" aria-label="Gold plan"></button>
+        <div class="plans-tabs" role="tablist">
+          <button class="plans-tab" data-plan="bronze" role="tab">Bronze</button>
+          <button class="plans-tab plans-tab--active" data-plan="silver" role="tab" aria-selected="true">Silver</button>
+          <button class="plans-tab" data-plan="gold" role="tab">Gold</button>
         </div>
-        <button class="plans-arrow plans-arrow--next" aria-label="Next plan">→</button>
+
+        <div class="plans-main">
+
+          <div class="plans-card-stack">
+            <article class="plan-card" data-plan="bronze">
+              <div class="plan-header">
+                <span class="plan-name">Bronze</span>
+                <span class="plan-freq">Monthly</span>
+              </div>
+              <div class="plan-price">
+                <span class="plan-from">from</span>
+                <span class="plan-amount">$149</span>
+                <span class="plan-per">/visit</span>
+              </div>
+              <ul class="plan-features">
+                <li>1 visit/month</li>
+                <li>Standard cleaning</li>
+                <li>Same team every time</li>
+                <li>Easy rescheduling</li>
+              </ul>
+            </article>
+
+            <article class="plan-card plan-card--featured plan-card--active" data-plan="silver">
+              <div class="plan-badge">Most Popular</div>
+              <div class="plan-header">
+                <span class="plan-name">Silver</span>
+                <span class="plan-freq">Bi-Weekly</span>
+              </div>
+              <div class="plan-price">
+                <span class="plan-from">from</span>
+                <span class="plan-amount">$129</span>
+                <span class="plan-per">/visit</span>
+              </div>
+              <p class="plan-saving">Save ~10% vs one-time</p>
+              <ul class="plan-features">
+                <li>2 visits/month</li>
+                <li>Standard cleaning</li>
+                <li>Same team every time</li>
+                <li>Priority scheduling</li>
+                <li>1 free upsell/quarter</li>
+              </ul>
+            </article>
+
+            <article class="plan-card" data-plan="gold">
+              <div class="plan-header">
+                <span class="plan-name">Gold</span>
+                <span class="plan-freq">Weekly</span>
+              </div>
+              <div class="plan-price">
+                <span class="plan-from">from</span>
+                <span class="plan-amount">$109</span>
+                <span class="plan-per">/visit</span>
+              </div>
+              <p class="plan-saving">Save ~15% vs one-time</p>
+              <ul class="plan-features">
+                <li>4 visits/month</li>
+                <li>Standard + deep rotation</li>
+                <li>Dedicated team</li>
+                <li>Priority scheduling</li>
+                <li>2 free upsells/quarter</li>
+                <li>Annual deep clean included</li>
+              </ul>
+            </article>
+          </div>
+
+          <aside class="plans-summary" aria-live="polite">
+            <span class="plans-summary-label">Your plan</span>
+            <h3 class="plans-summary-name">Silver <span class="plans-summary-freq">· Bi-Weekly</span></h3>
+            <div class="plans-summary-price">
+              <span class="plans-summary-amount">$129</span>
+              <span class="plans-summary-per">/visit</span>
+            </div>
+            <p class="plans-summary-note">scales by home size — confirmed at booking</p>
+            <a href="#booking" class="btn btn-primary plans-summary-cta">Yes, call me in 1 hour →</a>
+            <p class="plans-summary-micro">free · no obligation</p>
+          </aside>
+
+        </div>
       </div>
     </div>
   </section>

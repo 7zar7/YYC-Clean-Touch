@@ -467,88 +467,35 @@ function initCalculator() {
 })();
 
 // ── 15.3 PLANS CAROUSEL ──
-function initPlansCarousel() {
-  const carousel = document.querySelector('.plans-carousel');
-  const cards = carousel ? carousel.querySelectorAll('.plan-card') : [];
-  const dots  = document.querySelectorAll('.plans-dot');
-  const prev  = document.querySelector('.plans-arrow--prev');
-  const next  = document.querySelector('.plans-arrow--next');
-  if (!carousel || !cards.length) return;
+function initPlansTabs() {
+  const tabs  = document.querySelectorAll('.plans-tab');
+  const cards = document.querySelectorAll('.plan-card[data-plan]');
+  const sumName   = document.querySelector('.plans-summary-name');
+  const sumAmount = document.querySelector('.plans-summary-amount');
+  if (!tabs.length || !cards.length) return;
 
-  let activeIdx = 1; // Silver default
-
-  function update() {
-    cards.forEach((card, i) => {
-      const offset = i - activeIdx;
-      const abs = Math.abs(offset);
-      if (abs === 0) {
-        card.style.setProperty('--offset', '0%');
-        card.style.setProperty('--scale', '1');
-        card.style.setProperty('--opacity', '1');
-        card.style.setProperty('--z', '3');
-        card.classList.add('plan-card--active');
-      } else if (abs === 1) {
-        const dir = offset > 0 ? 1 : -1;
-        card.style.setProperty('--offset', `${dir * 65}%`);
-        card.style.setProperty('--scale', '0.85');
-        card.style.setProperty('--opacity', '0.5');
-        card.style.setProperty('--z', '2');
-        card.classList.remove('plan-card--active');
-      } else {
-        const dir = offset > 0 ? 1 : -1;
-        card.style.setProperty('--offset', `${dir * 130}%`);
-        card.style.setProperty('--scale', '0.7');
-        card.style.setProperty('--opacity', '0');
-        card.style.setProperty('--z', '1');
-        card.classList.remove('plan-card--active');
-      }
-    });
-    dots.forEach((d, i) => d.classList.toggle('plans-dot--active', i === activeIdx));
-    if (prev) prev.disabled = activeIdx === 0;
-    if (next) next.disabled = activeIdx === cards.length - 1;
-  }
-
-  const setActive = (i) => {
-    activeIdx = Math.max(0, Math.min(cards.length - 1, i));
-    update();
+  const PLAN_DATA = {
+    bronze: { name: 'Bronze', freq: 'Monthly',   price: '$149' },
+    silver: { name: 'Silver', freq: 'Bi-Weekly', price: '$129' },
+    gold:   { name: 'Gold',   freq: 'Weekly',    price: '$109' },
   };
 
-  prev && prev.addEventListener('click', () => setActive(activeIdx - 1));
-  next && next.addEventListener('click', () => setActive(activeIdx + 1));
-  dots.forEach((d, i) => d.addEventListener('click', () => setActive(i)));
-
-  // Click a side card to bring it to center (don't follow link inside it)
-  cards.forEach((card, i) => {
-    card.addEventListener('click', (e) => {
-      if (i !== activeIdx) {
-        e.preventDefault();
-        setActive(i);
-      }
+  function setActive(planId) {
+    if (!PLAN_DATA[planId]) return;
+    tabs.forEach(t => {
+      const on = t.dataset.plan === planId;
+      t.classList.toggle('plans-tab--active', on);
+      if (on) t.setAttribute('aria-selected', 'true');
+      else t.removeAttribute('aria-selected');
     });
-  });
+    cards.forEach(c => c.classList.toggle('plan-card--active', c.dataset.plan === planId));
 
-  // Touch swipe — horizontal only; vertical movement leaves it to page scroll
-  let startX = 0, startY = 0, dragging = false;
-  carousel.addEventListener('touchstart', (e) => {
-    if (!e.touches[0]) return;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dragging = true;
-  }, { passive: true });
-  carousel.addEventListener('touchend', (e) => {
-    if (!dragging) return;
-    dragging = false;
-    const t = (e.changedTouches && e.changedTouches[0]);
-    if (!t) return;
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
-    // Only treat as swipe if it's clearly horizontal and ≥ 50px
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      setActive(activeIdx + (dx < 0 ? 1 : -1));
-    }
-  });
+    const d = PLAN_DATA[planId];
+    if (sumName)   sumName.innerHTML = `${d.name} <span class="plans-summary-freq">· ${d.freq}</span>`;
+    if (sumAmount) sumAmount.textContent = d.price;
+  }
 
-  update();
+  tabs.forEach(t => t.addEventListener('click', () => setActive(t.dataset.plan)));
 }
 
 // ── 15.4 STICKY CTA BAR ──
@@ -653,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalculator();
     initBeforeAfter();
     initStickyCTA();
-    initPlansCarousel();
+    initPlansTabs();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
