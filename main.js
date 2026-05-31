@@ -160,6 +160,26 @@ function initReveals() {
   });
 }
 
+// ── 10.5 SECTION H2 HORIZONTAL REVEALS ──
+function initSectionH2Reveals() {
+  if (isMobile || prefersReducedMotion) return;
+
+  const h2s = document.querySelectorAll('section h2');
+  h2s.forEach((h2, i) => {
+    h2.classList.add('h2-reveal', i % 2 === 0 ? 'h2-reveal--left' : 'h2-reveal--right');
+  });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('h2-reveal--in');
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+
+  h2s.forEach(h2 => obs.observe(h2));
+}
+
 // ── 11. MOBILE MENU ──
 function initMobileMenu() {
   const burger = document.querySelector('.nav-burger');
@@ -223,14 +243,9 @@ function initBookingForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const contactEl = document.getElementById('f-contact');
-    const serviceEl = document.getElementById('f-service');
     const contact = contactEl.value.trim();
-    const service = serviceEl.value;
 
-    let ok = true;
-    if (!contact)  { flagInvalid(contactEl); ok = false; }
-    if (!service)  { flagInvalid(serviceEl); ok = false; }
-    if (!ok) return;
+    if (!contact) { flagInvalid(contactEl); return; }
 
     const reveal = () => {
       form.style.display = 'none';
@@ -544,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroEntrance();
     initStatsCounter();
     initReveals();
+    initSectionH2Reveals();
     initMobileMenu();
     initSmoothScroll();
     initBookingForm();
