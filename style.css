@@ -170,10 +170,7 @@ h2 em { font-style: italic; color: var(--accent); }
   background: var(--bg);
 }
 .portal-wrapper {
-  position: absolute;
-  top: 5vh; bottom: auto;
-  left: auto; right: -5%;
-  width: 45vw; height: 90vh;
+  position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   z-index: 1;
   pointer-events: none;
@@ -240,8 +237,8 @@ h2 em { font-style: italic; color: var(--accent); }
 }
 .hero-content {
   position: relative; z-index: var(--z-content);
-  width: 100%; max-width: 50%;
-  margin: 0 auto 0 0;
+  width: 100%; max-width: var(--max-w);
+  margin: 0 auto;
   padding: calc(72px + 4rem) clamp(1.5rem, 5vw, 4rem) 5rem;
   display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem;
 }
@@ -955,7 +952,7 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
   /* Hero: hide arch portal, restore normal top-down flow */
   .portal-wrapper { display: none; }
   #hero { align-items: flex-start; min-height: auto; }
-  .hero-content { padding-top: 120px; max-width: 100%; margin: 0 auto; }
+  .hero-content { padding-top: 120px; }
   .hero-display { font-size: clamp(80px, 22vw, 140px); }
 
   /* Mobile: drop the duplicate primary CTA from hero (sticky bar + nav pill cover conversion) */
