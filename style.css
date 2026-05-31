@@ -645,7 +645,7 @@ h2 em { font-style: italic; color: var(--accent); }
   object-fit: cover;
   object-position: center;
   display: block;
-  margin: -2.5rem -2rem 1.5rem -2rem;
+  margin: -2.5rem -2rem 1rem -2rem;
   width: calc(100% + 4rem);
 }
 .detailing-icon { font-size: 2rem; }
