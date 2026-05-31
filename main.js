@@ -41,6 +41,7 @@ function initPortal() {
     return;
   }
 
+  const hero = document.getElementById('hero');
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '#hero',
@@ -48,6 +49,9 @@ function initPortal() {
       end: '+=150%',
       pin: true,
       scrub: 1,
+      onUpdate: (self) => {
+        hero.classList.toggle('hero-portal-open', self.progress > 0.25);
+      }
     }
   });
 
