@@ -527,19 +527,25 @@ function initPlansCarousel() {
     });
   });
 
-  // Touch swipe — works for both mobile and desktop pointer
-  let startX = 0, dragging = false;
+  // Touch swipe — horizontal only; vertical movement leaves it to page scroll
+  let startX = 0, startY = 0, dragging = false;
   carousel.addEventListener('touchstart', (e) => {
     if (!e.touches[0]) return;
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     dragging = true;
   }, { passive: true });
   carousel.addEventListener('touchend', (e) => {
     if (!dragging) return;
     dragging = false;
-    const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
-    const dx = endX - startX;
-    if (Math.abs(dx) > 40) setActive(activeIdx + (dx < 0 ? 1 : -1));
+    const t = (e.changedTouches && e.changedTouches[0]);
+    if (!t) return;
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    // Only treat as swipe if it's clearly horizontal and ≥ 50px
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      setActive(activeIdx + (dx < 0 ? 1 : -1));
+    }
   });
 
   update();
@@ -578,7 +584,7 @@ function initStickyCTA() {
 
 // ── 15.5 BEFORE / AFTER SLIDERS ──
 function initBeforeAfter() {
-  document.querySelectorAll('[data-ba-slider]').forEach(slider => {
+  document.querySelectorAll('.ba-slider').forEach(slider => {
     let active = false;
 
     const setPos = (clientX) => {
