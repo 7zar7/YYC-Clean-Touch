@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -77,11 +77,16 @@
 
       <div class="hero-actions">
         <a href="#booking" class="btn btn-primary">
-          Get my free quote →
+          I want my spotless home →
         </a>
-        <a href="#plans" class="btn btn-ghost">See pricing</a>
+        <a href="#services" class="btn btn-ghost">See what's included ↓</a>
       </div>
-      <p class="hero-micro">Takes 60 seconds · free · no obligation.</p>
+      <div class="hero-marquee" role="region" aria-label="Trust signals">
+        <div class="hero-marquee-track">
+          <span class="hero-marquee-item">✦ Licensed &amp; Bonded · WCB Covered · Background-checked team · Same team every visit · 100% Happiness Guarantee · 5 years in Calgary · 847 cleans completed · 4.9★ on Google</span>
+          <span class="hero-marquee-item" aria-hidden="true">✦ Licensed &amp; Bonded · WCB Covered · Background-checked team · Same team every visit · 100% Happiness Guarantee · 5 years in Calgary · 847 cleans completed · 4.9★ on Google</span>
+        </div>
+      </div>
 
       <!-- ── STATS BAR (replaces simple trust-bar) ── -->
       <div class="hero-stats" role="list" aria-label="Our track record">
@@ -103,21 +108,6 @@
         <div class="hero-stat" role="listitem">
           <span class="hero-stat-number">5</span>
           <span class="hero-stat-label">Years in Calgary</span>
-        </div>
-      </div>
-
-      <div class="trust-bar" role="list">
-        <div class="trust-item" role="listitem">
-          <span class="trust-check" aria-hidden="true">✓</span>
-          Licensed &amp; Bonded
-        </div>
-        <div class="trust-item" role="listitem">
-          <span class="trust-check" aria-hidden="true">✓</span>
-          WCB Covered
-        </div>
-        <div class="trust-item" role="listitem">
-          <span class="trust-check" aria-hidden="true">✓</span>
-          100% Happiness Guaranteed
         </div>
       </div>
 
@@ -234,6 +224,94 @@
     </div>
   </section>
 
+  <!-- ── PRICE CALCULATOR ── -->
+  <section id="calculator" class="section-light">
+    <div class="container container--narrow">
+      <div class="section-header reveal">
+        <span class="eyebrow">Instant Estimate</span>
+        <h2>What will it<br><em>actually cost?</em></h2>
+        <p class="section-sub">Get a ballpark in 10 seconds. No email required. We'll confirm the exact price before we start.</p>
+      </div>
+
+      <div class="calc-card reveal" id="priceCalc">
+
+        <!-- Row 1: Service type -->
+        <div class="calc-row">
+          <p class="calc-row-label">What type of service?</p>
+          <div class="calc-options" id="calcType">
+            <button class="calc-opt calc-opt--active" data-type="regular">Regular</button>
+            <button class="calc-opt" data-type="deep">Deep Clean</button>
+            <button class="calc-opt" data-type="moveinout">Move-In/Out</button>
+            <button class="calc-opt" data-type="postconstruction">Post-Construction</button>
+            <button class="calc-opt calc-opt--auto" data-type="auto">Auto Detail</button>
+          </div>
+        </div>
+
+        <!-- Row 2: Bedrooms (home only) -->
+        <div class="calc-row" id="calcBedroomRow">
+          <p class="calc-row-label">How many bedrooms?</p>
+          <div class="calc-stepper">
+            <button class="calc-step-btn" id="bedroomMinus" aria-label="Remove bedroom">−</button>
+            <span class="calc-step-val" id="bedroomCount">2</span>
+            <button class="calc-step-btn" id="bedroomPlus" aria-label="Add bedroom">+</button>
+            <span class="calc-step-hint">bedrooms</span>
+          </div>
+        </div>
+
+        <!-- Row 3: Bathrooms (home only) -->
+        <div class="calc-row" id="calcBathroomRow">
+          <p class="calc-row-label">How many bathrooms?</p>
+          <div class="calc-stepper">
+            <button class="calc-step-btn" id="bathroomMinus" aria-label="Remove bathroom">−</button>
+            <span class="calc-step-val" id="bathroomCount">1</span>
+            <button class="calc-step-btn" id="bathroomPlus" aria-label="Add bathroom">+</button>
+            <span class="calc-step-hint">bathrooms</span>
+          </div>
+        </div>
+
+        <!-- Row 2/3 (auto): Detail package — hidden unless Auto Detail selected -->
+        <div class="calc-row calc-row--hidden" id="calcAutoRow">
+          <p class="calc-row-label">Which detail package?</p>
+          <div class="calc-options" id="calcAuto">
+            <button class="calc-opt calc-opt--active" data-auto="interior">Interior Detail</button>
+            <button class="calc-opt" data-auto="full">Full Detail</button>
+            <button class="calc-opt" data-auto="odour">Odour Treatment</button>
+          </div>
+        </div>
+
+        <!-- Row 4: Frequency (home only) -->
+        <div class="calc-row" id="calcFreqRow">
+          <p class="calc-row-label">How often?</p>
+          <div class="calc-options" id="calcFreq">
+            <button class="calc-opt" data-freq="onetime">One-time</button>
+            <button class="calc-opt calc-opt--active" data-freq="monthly">Monthly</button>
+            <button class="calc-opt" data-freq="biweekly">Bi-weekly</button>
+            <button class="calc-opt" data-freq="weekly">Weekly</button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="calc-result" id="calcResult">
+          <div class="calc-result-inner">
+            <div class="calc-price-block">
+              <span class="calc-price-label">Estimated price</span>
+              <span class="calc-price" id="calcPrice">$189</span>
+              <span class="calc-price-per" id="calcPricePer">/visit</span>
+            </div>
+            <div class="calc-savings-block" id="calcSavings">
+              <!-- populated by JS -->
+            </div>
+          </div>
+          <a href="#booking" class="btn btn-primary calc-cta" id="calcCta">
+            Book This Clean →
+          </a>
+          <p class="calc-disclaimer">Exact price confirmed before we start. No surprises.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ── SUBSCRIPTION PLANS ── -->
   <section id="plans" class="section-alt">
     <div class="container">
@@ -307,83 +385,6 @@
           </ul>
           <a href="#booking" class="btn btn-outline">Start Gold</a>
         </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── PRICE CALCULATOR ── -->
-  <section id="calculator" class="section-light">
-    <div class="container container--narrow">
-      <div class="section-header reveal">
-        <span class="eyebrow">Instant Estimate</span>
-        <h2>What will it<br><em>actually cost?</em></h2>
-        <p class="section-sub">Get a ballpark in 10 seconds. No email required. We'll confirm the exact price before we start.</p>
-      </div>
-
-      <div class="calc-card reveal" id="priceCalc">
-
-        <!-- Row 1: Service type -->
-        <div class="calc-row">
-          <p class="calc-row-label">What type of cleaning?</p>
-          <div class="calc-options" id="calcType">
-            <button class="calc-opt calc-opt--active" data-type="regular">Regular</button>
-            <button class="calc-opt" data-type="deep">Deep Clean</button>
-            <button class="calc-opt" data-type="moveinout">Move-In/Out</button>
-            <button class="calc-opt" data-type="postconstruction">Post-Construction</button>
-          </div>
-        </div>
-
-        <!-- Row 2: Bedrooms -->
-        <div class="calc-row">
-          <p class="calc-row-label">How many bedrooms?</p>
-          <div class="calc-stepper">
-            <button class="calc-step-btn" id="bedroomMinus" aria-label="Remove bedroom">−</button>
-            <span class="calc-step-val" id="bedroomCount">2</span>
-            <button class="calc-step-btn" id="bedroomPlus" aria-label="Add bedroom">+</button>
-            <span class="calc-step-hint">bedrooms</span>
-          </div>
-        </div>
-
-        <!-- Row 3: Bathrooms -->
-        <div class="calc-row">
-          <p class="calc-row-label">How many bathrooms?</p>
-          <div class="calc-stepper">
-            <button class="calc-step-btn" id="bathroomMinus" aria-label="Remove bathroom">−</button>
-            <span class="calc-step-val" id="bathroomCount">1</span>
-            <button class="calc-step-btn" id="bathroomPlus" aria-label="Add bathroom">+</button>
-            <span class="calc-step-hint">bathrooms</span>
-          </div>
-        </div>
-
-        <!-- Row 4: Frequency -->
-        <div class="calc-row">
-          <p class="calc-row-label">How often?</p>
-          <div class="calc-options" id="calcFreq">
-            <button class="calc-opt" data-freq="onetime">One-time</button>
-            <button class="calc-opt calc-opt--active" data-freq="monthly">Monthly</button>
-            <button class="calc-opt" data-freq="biweekly">Bi-weekly</button>
-            <button class="calc-opt" data-freq="weekly">Weekly</button>
-          </div>
-        </div>
-
-        <!-- Result -->
-        <div class="calc-result" id="calcResult">
-          <div class="calc-result-inner">
-            <div class="calc-price-block">
-              <span class="calc-price-label">Estimated price</span>
-              <span class="calc-price" id="calcPrice">$189</span>
-              <span class="calc-price-per" id="calcPricePer">/visit</span>
-            </div>
-            <div class="calc-savings-block" id="calcSavings">
-              <!-- populated by JS -->
-            </div>
-          </div>
-          <a href="#booking" class="btn btn-primary calc-cta" id="calcCta">
-            Book This Clean →
-          </a>
-          <p class="calc-disclaimer">Exact price confirmed before we start. No surprises.</p>
-        </div>
 
       </div>
     </div>
@@ -585,94 +586,54 @@
     <div class="container container--narrow">
       <div class="section-header reveal">
         <span class="eyebrow">Get Started</span>
-        <h2>Get my free quote.<br><em>Two quick steps.</em></h2>
-        <p class="section-sub">Takes 60 seconds. We'll follow up within 2 hours — by phone or email, whichever you prefer. No spam. We're Canadian.</p>
+        <h2>Get my free quote.<br><em>One field, one button.</em></h2>
+        <p class="section-sub">No long forms. We'll call or text within 1 hour during business hours.</p>
       </div>
 
-      <div class="booking-form reveal" id="bookingForm">
-
-        <div class="form-step" id="formStep1">
-          <div class="form-grid">
-            <div class="form-field">
-              <label for="f-name">Name</label>
-              <input type="text" id="f-name" name="name" placeholder="Jane Smith" autocomplete="name" required>
-            </div>
-            <div class="form-field">
-              <label for="f-phone">Phone</label>
-              <input type="tel" id="f-phone" name="phone" placeholder="403-555-0100" autocomplete="tel">
-            </div>
-            <div class="form-field form-field--full">
-              <label for="f-email">Email</label>
-              <input type="email" id="f-email" name="email" placeholder="jane@example.com" autocomplete="email" required>
-            </div>
-            <div class="form-field form-field--full">
-              <label for="f-service">What do you need?</label>
-              <select id="f-service" name="service" required>
-                <option value="" disabled selected>Choose a service…</option>
-                <optgroup label="Home Cleaning">
-                  <option value="regular">Regular Cleaning</option>
-                  <option value="deep">Deep Cleaning</option>
-                  <option value="movein">Move-In Cleaning</option>
-                  <option value="moveout">Move-Out Cleaning</option>
-                  <option value="postconstruction">Post-Construction Cleanup</option>
-                </optgroup>
-                <optgroup label="Cleaning Plans">
-                  <option value="bronze">Bronze Plan (Monthly)</option>
-                  <option value="silver">Silver Plan (Bi-Weekly)</option>
-                  <option value="gold">Gold Plan (Weekly)</option>
-                </optgroup>
-                <optgroup label="Auto Detailing">
-                  <option value="interior-detail">Interior Detail</option>
-                  <option value="full-detail">Full Detail</option>
-                  <option value="odour">Odour Treatment</option>
-                </optgroup>
-                <option value="bundle">Home + Auto Bundle</option>
-                <option value="other">Something else (tell us below)</option>
-              </select>
-            </div>
+      <form class="booking-form reveal" id="bookingForm" novalidate>
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label for="f-contact">Phone or email</label>
+            <input type="text" id="f-contact" name="contact" placeholder="Phone or email" autocomplete="email" required>
           </div>
-
-          <div class="form-action-bar">
-            <button type="button" class="btn btn-ghost btn-sm" id="btnClear">
-              Clear
-              <span class="btn-sub">(No judgment)</span>
-            </button>
-            <button type="button" class="btn btn-primary" id="btnNext">
-              Next — Choose Contact Preference →
-            </button>
+          <div class="form-field form-field--full">
+            <label for="f-service">What do you need?</label>
+            <select id="f-service" name="service" required>
+              <option value="" disabled selected>Choose a service…</option>
+              <optgroup label="Home Cleaning">
+                <option value="regular">Regular Cleaning</option>
+                <option value="deep">Deep Cleaning</option>
+                <option value="movein">Move-In Cleaning</option>
+                <option value="moveout">Move-Out Cleaning</option>
+                <option value="postconstruction">Post-Construction Cleanup</option>
+              </optgroup>
+              <optgroup label="Cleaning Plans">
+                <option value="bronze">Bronze Plan (Monthly)</option>
+                <option value="silver">Silver Plan (Bi-Weekly)</option>
+                <option value="gold">Gold Plan (Weekly)</option>
+              </optgroup>
+              <optgroup label="Auto Detailing">
+                <option value="interior-detail">Interior Detail</option>
+                <option value="full-detail">Full Detail</option>
+                <option value="odour">Odour Treatment</option>
+              </optgroup>
+              <option value="bundle">Home + Auto Bundle</option>
+              <option value="other">Something else</option>
+            </select>
           </div>
         </div>
 
-        <div class="form-step form-step--hidden" id="formStep2">
-          <p class="step2-label">How should we reach you?</p>
-          <div class="contact-choice">
-            <button type="button" class="choice-btn" id="choiceCall">
-              <span class="choice-icon" aria-hidden="true">📞</span>
-              <strong>Call me</strong>
-              <span>We'll call within 2 hours</span>
-            </button>
-            <button type="button" class="choice-btn" id="choiceEmail">
-              <span class="choice-icon" aria-hidden="true">✉️</span>
-              <strong>Email me</strong>
-              <span>Get a detailed quote by email</span>
-            </button>
-          </div>
-
-          <div class="form-action-bar">
-            <button type="button" class="btn btn-ghost btn-sm" id="btnBack">← Back</button>
-            <button type="button" class="btn btn-primary" id="btnSubmit" disabled>Send My Request ✓</button>
-          </div>
+        <div class="form-action-bar form-action-bar--centered">
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Get my free quote →</button>
         </div>
+        <p class="form-microcopy">We'll call or text within 1 hour during business hours.</p>
+      </form>
 
-        <div class="form-step form-step--hidden" id="formStep3">
-          <div class="form-confirm">
-            <div class="confirm-icon" aria-hidden="true">✦</div>
-            <h3>You're all set!</h3>
-            <p>We'll be in touch within 2 hours. In the meantime, feel free to enjoy your (currently un-cleaned) home with zero guilt. That's what we're here for.</p>
-            <a href="#services" class="btn btn-ghost btn-sm">← Back to Services</a>
-          </div>
-        </div>
-
+      <div class="form-confirm form-step--hidden" id="formConfirm">
+        <div class="confirm-icon" aria-hidden="true">✦</div>
+        <h3>You're all set!</h3>
+        <p>We'll be in touch within 1 hour. In the meantime, feel free to enjoy your (currently un-cleaned) home with zero guilt.</p>
+        <a href="#services" class="btn btn-ghost btn-sm">← Back to Services</a>
       </div>
     </div>
   </section>
@@ -739,6 +700,11 @@
       </div>
     </div>
   </footer>
+
+  <!-- ── STICKY CTA BAR ── -->
+  <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+    <a href="#booking" class="btn btn-primary sticky-cta-btn">Yes, call me in 1 hour →</a>
+  </div>
 
   <script src="main.js"></script>
 </body>

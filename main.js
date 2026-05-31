@@ -295,73 +295,44 @@ function initSmoothScroll() {
 
 // ── 13. BOOKING FORM ──
 function initBookingForm() {
-  const step1 = document.getElementById('formStep1');
-  const step2 = document.getElementById('formStep2');
-  const step3 = document.getElementById('formStep3');
-  const btnNext = document.getElementById('btnNext');
-  const btnBack = document.getElementById('btnBack');
-  const btnClear = document.getElementById('btnClear');
-  const btnSubmit = document.getElementById('btnSubmit');
-  const choiceCall = document.getElementById('choiceCall');
-  const choiceEmail = document.getElementById('choiceEmail');
-  if (!step1 || !step2 || !step3) return;
+  const form = document.getElementById('bookingForm');
+  const confirm = document.getElementById('formConfirm');
+  if (!form || !confirm) return;
 
-  let contactPref = null;
+  const flagInvalid = (el) => {
+    gsap.fromTo(el, { x: -6 }, { x: 0, duration: 0.4, ease: 'elastic.out(1, 0.3)' });
+    el.style.borderColor = '#e07070';
+    setTimeout(() => el.style.borderColor = '', 2000);
+  };
 
-  function showStep(from, to) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const contactEl = document.getElementById('f-contact');
+    const serviceEl = document.getElementById('f-service');
+    const contact = contactEl.value.trim();
+    const service = serviceEl.value;
+
+    let ok = true;
+    if (!contact)  { flagInvalid(contactEl); ok = false; }
+    if (!service)  { flagInvalid(serviceEl); ok = false; }
+    if (!ok) return;
+
+    const reveal = () => {
+      form.style.display = 'none';
+      confirm.classList.remove('form-step--hidden');
+    };
+
     if (prefersReducedMotion) {
-      from.classList.add('form-step--hidden');
-      to.classList.remove('form-step--hidden');
-      return;
-    }
-    gsap.to(from, { opacity: 0, x: -20, duration: 0.3, ease: 'power2.in', onComplete: () => {
-      from.classList.add('form-step--hidden');
-      to.classList.remove('form-step--hidden');
-      gsap.fromTo(to, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' });
-    }});
-  }
-
-  function validateStep1() {
-    const name = document.getElementById('f-name').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const service = document.getElementById('f-service').value;
-    return name && email && service;
-  }
-
-  btnNext && btnNext.addEventListener('click', () => {
-    if (!validateStep1()) {
-      document.querySelectorAll('#formStep1 input:invalid, #formStep1 select:invalid').forEach(el => {
-        gsap.fromTo(el, { x: -6 }, { x: 0, duration: 0.4, ease: 'elastic.out(1, 0.3)' });
-        el.style.borderColor = '#e07070';
-        setTimeout(() => el.style.borderColor = '', 2000);
+      reveal();
+    } else {
+      gsap.to(form, {
+        opacity: 0, y: -10, duration: 0.3, ease: 'power2.in',
+        onComplete: () => {
+          reveal();
+          gsap.fromTo(confirm, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+        }
       });
-      return;
     }
-    showStep(step1, step2);
-  });
-
-  btnBack && btnBack.addEventListener('click', () => showStep(step2, step1));
-
-  btnClear && btnClear.addEventListener('click', () => {
-    document.getElementById('f-name').value = '';
-    document.getElementById('f-phone').value = '';
-    document.getElementById('f-email').value = '';
-    document.getElementById('f-service').value = '';
-  });
-
-  [choiceCall, choiceEmail].forEach(btn => {
-    btn && btn.addEventListener('click', () => {
-      choiceCall.classList.remove('selected');
-      choiceEmail.classList.remove('selected');
-      btn.classList.add('selected');
-      contactPref = btn === choiceCall ? 'call' : 'email';
-      btnSubmit && (btnSubmit.disabled = false);
-    });
-  });
-
-  btnSubmit && btnSubmit.addEventListener('click', () => {
-    if (!contactPref) return;
-    showStep(step2, step3);
   });
 }
 
@@ -376,6 +347,13 @@ function initCalculator() {
     deep:             { 1: 179, 2: 229, 3: 279, 4: 329, 5: 379, 6: 429 },
     moveinout:        { 1: 199, 2: 259, 3: 319, 4: 379, 5: 439, 6: 499 },
     postconstruction: { 1: 249, 2: 329, 3: 409, 4: 489, 5: 569, 6: 649 },
+  };
+
+  // Auto detailing — "starting from" prices
+  const AUTO_PRICES = {
+    interior: 120,
+    full:     220,
+    odour:    80,
   };
 
   // Bathroom surcharge per extra bathroom beyond 1
@@ -402,9 +380,14 @@ function initCalculator() {
     bedrooms: 2,
     bathrooms: 1,
     freq: 'monthly',
+    autoService: 'interior',
   };
 
   function calcPrice() {
+    if (state.type === 'auto') {
+      const final = AUTO_PRICES[state.autoService];
+      return { final, savedPerVisit: 0, discount: 0 };
+    }
     const bedroomKey = Math.min(state.bedrooms, 6);
     const base = BASE_PRICES[state.type][bedroomKey] || BASE_PRICES[state.type][6];
     const bathroomAdd = Math.max(0, state.bathrooms - 1) * BATHROOM_SURCHARGE;
@@ -413,6 +396,14 @@ function initCalculator() {
     const final = Math.round(subtotal * (1 - discount));
     const savedPerVisit = Math.round(subtotal * discount);
     return { final, savedPerVisit, discount };
+  }
+
+  function setMode(type) {
+    const isAuto = type === 'auto';
+    document.getElementById('calcBedroomRow')?.classList.toggle('calc-row--hidden', isAuto);
+    document.getElementById('calcBathroomRow')?.classList.toggle('calc-row--hidden', isAuto);
+    document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', isAuto);
+    document.getElementById('calcAutoRow')?.classList.toggle('calc-row--hidden', !isAuto);
   }
 
   function animatePrice(newVal) {
@@ -433,11 +424,13 @@ function initCalculator() {
     animatePrice(final);
 
     const perEl = document.getElementById('calcPricePer');
-    if (perEl) perEl.textContent = FREQ_LABEL[state.freq];
+    if (perEl) perEl.textContent = state.type === 'auto' ? '· starting from' : FREQ_LABEL[state.freq];
 
     const savingsEl = document.getElementById('calcSavings');
     if (savingsEl) {
-      if (savedPerVisit > 0) {
+      if (state.type === 'auto') {
+        savingsEl.innerHTML = '';
+      } else if (savedPerVisit > 0) {
         savingsEl.innerHTML = `<span class="calc-saving-badge">You save $${savedPerVisit}/visit · ${Math.round(discount * 100)}% off</span>`;
       } else {
         savingsEl.innerHTML = '';
@@ -448,14 +441,20 @@ function initCalculator() {
     const ctaEl = document.getElementById('calcCta');
     if (ctaEl) {
       ctaEl.href = `#booking`;
+      ctaEl.textContent = state.type === 'auto' ? 'Book This Detail →' : 'Book This Clean →';
       ctaEl.addEventListener('click', () => {
         // Pre-fill the service dropdown
         const serviceMap = {
           regular: 'regular', deep: 'deep',
           moveinout: 'movein', postconstruction: 'postconstruction'
         };
+        const autoMap = { interior: 'interior-detail', full: 'full-detail', odour: 'odour' };
         const serviceEl = document.getElementById('f-service');
-        if (serviceEl) serviceEl.value = serviceMap[state.type] || '';
+        if (serviceEl) {
+          serviceEl.value = state.type === 'auto'
+            ? (autoMap[state.autoService] || '')
+            : (serviceMap[state.type] || '');
+        }
       });
     }
   }
@@ -467,6 +466,18 @@ function initCalculator() {
       typeContainer.querySelectorAll('.calc-opt').forEach(b => b.classList.remove('calc-opt--active'));
       btn.classList.add('calc-opt--active');
       state.type = btn.dataset.type;
+      setMode(state.type);
+      updateDisplay();
+    });
+  });
+
+  // Auto sub-service buttons
+  const autoContainer = document.getElementById('calcAuto');
+  autoContainer && autoContainer.querySelectorAll('.calc-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      autoContainer.querySelectorAll('.calc-opt').forEach(b => b.classList.remove('calc-opt--active'));
+      btn.classList.add('calc-opt--active');
+      state.autoService = btn.dataset.auto;
       updateDisplay();
     });
   });
@@ -522,6 +533,37 @@ function initCalculator() {
     document.head.appendChild(s);
   }
 })();
+
+// ── 15.4 STICKY CTA BAR ──
+function initStickyCTA() {
+  const bar = document.getElementById('stickyCta');
+  if (!bar) return;
+
+  // Sections that should HIDE the bar (hero = not yet scrolled past;
+  // services/plans/booking already have their own CTAs)
+  const hideIds = ['hero', 'services', 'plans', 'booking'];
+  const targets = hideIds
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  const inView = new Set();
+
+  const apply = () => {
+    const shouldShow = inView.size === 0;
+    bar.classList.toggle('sticky-cta--visible', shouldShow);
+    bar.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) inView.add(e.target.id);
+      else inView.delete(e.target.id);
+    });
+    apply();
+  }, { threshold: 0.08 });
+
+  targets.forEach(el => observer.observe(el));
+}
 
 // ── 15.5 BEFORE / AFTER SLIDERS ──
 function initBeforeAfter() {
@@ -592,6 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBookingForm();
     initCalculator();
     initBeforeAfter();
+    initStickyCTA();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
