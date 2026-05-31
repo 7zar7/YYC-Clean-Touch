@@ -35,8 +35,10 @@ function initPortal() {
   const before  = document.querySelector('.layer-before');
   if (!portal) return;
 
-  // Mobile: skip pin/scroll animation, show static arch
-  if (isMobile || prefersReducedMotion) {
+  // Mobile: wrapper is hidden via CSS — skip entirely
+  if (isMobile) return;
+  // Reduced-motion (desktop): show static arch at fixed scale, no scroll pin
+  if (prefersReducedMotion) {
     gsap.set(portal, { scale: 0.6 });
     return;
   }
@@ -466,24 +468,42 @@ function initCalculator() {
 
 // ── 15.3 PLANS CAROUSEL ──
 function initPlansCarousel() {
-  const track = document.querySelector('.plans-grid');
-  const cards = track ? track.querySelectorAll('.plan-card') : [];
+  const carousel = document.querySelector('.plans-carousel');
+  const cards = carousel ? carousel.querySelectorAll('.plan-card') : [];
   const dots  = document.querySelectorAll('.plans-dot');
   const prev  = document.querySelector('.plans-arrow--prev');
   const next  = document.querySelector('.plans-arrow--next');
-  if (!track || !cards.length) return;
+  if (!carousel || !cards.length) return;
 
-  const mobileMQ = window.matchMedia('(max-width: 768px)');
   let activeIdx = 1; // Silver default
 
   function update() {
-    cards.forEach((c, i) => c.classList.toggle('plan-card--active', i === activeIdx));
-    dots.forEach((d, i)  => d.classList.toggle('plans-dot--active', i === activeIdx));
-    if (mobileMQ.matches) {
-      track.style.transform = `translateX(-${activeIdx * 100}%)`;
-    } else {
-      track.style.transform = '';
-    }
+    cards.forEach((card, i) => {
+      const offset = i - activeIdx;
+      const abs = Math.abs(offset);
+      if (abs === 0) {
+        card.style.setProperty('--offset', '0%');
+        card.style.setProperty('--scale', '1');
+        card.style.setProperty('--opacity', '1');
+        card.style.setProperty('--z', '3');
+        card.classList.add('plan-card--active');
+      } else if (abs === 1) {
+        const dir = offset > 0 ? 1 : -1;
+        card.style.setProperty('--offset', `${dir * 65}%`);
+        card.style.setProperty('--scale', '0.85');
+        card.style.setProperty('--opacity', '0.5');
+        card.style.setProperty('--z', '2');
+        card.classList.remove('plan-card--active');
+      } else {
+        const dir = offset > 0 ? 1 : -1;
+        card.style.setProperty('--offset', `${dir * 130}%`);
+        card.style.setProperty('--scale', '0.7');
+        card.style.setProperty('--opacity', '0');
+        card.style.setProperty('--z', '1');
+        card.classList.remove('plan-card--active');
+      }
+    });
+    dots.forEach((d, i) => d.classList.toggle('plans-dot--active', i === activeIdx));
     if (prev) prev.disabled = activeIdx === 0;
     if (next) next.disabled = activeIdx === cards.length - 1;
   }
@@ -497,23 +517,30 @@ function initPlansCarousel() {
   next && next.addEventListener('click', () => setActive(activeIdx + 1));
   dots.forEach((d, i) => d.addEventListener('click', () => setActive(i)));
 
-  // Touch swipe (mobile)
-  let startX = 0, active = false;
-  track.addEventListener('touchstart', (e) => {
+  // Click a side card to bring it to center (don't follow link inside it)
+  cards.forEach((card, i) => {
+    card.addEventListener('click', (e) => {
+      if (i !== activeIdx) {
+        e.preventDefault();
+        setActive(i);
+      }
+    });
+  });
+
+  // Touch swipe — works for both mobile and desktop pointer
+  let startX = 0, dragging = false;
+  carousel.addEventListener('touchstart', (e) => {
     if (!e.touches[0]) return;
     startX = e.touches[0].clientX;
-    active = true;
+    dragging = true;
   }, { passive: true });
-  track.addEventListener('touchend', (e) => {
-    if (!active) return;
-    active = false;
+  carousel.addEventListener('touchend', (e) => {
+    if (!dragging) return;
+    dragging = false;
     const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
     const dx = endX - startX;
     if (Math.abs(dx) > 40) setActive(activeIdx + (dx < 0 ? 1 : -1));
   });
-
-  // Sync on viewport change (mobile ↔ desktop)
-  window.addEventListener('resize', debounce(update, 150));
 
   update();
 }
