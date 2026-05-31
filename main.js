@@ -535,6 +535,7 @@ function initBeforeAfter() {
       slider.style.setProperty('--ba', (x / rect.width) * 100 + '%');
     };
 
+    // Pointer events — mouse, stylus, modern touch
     slider.addEventListener('pointerdown', (e) => {
       active = true;
       try { slider.setPointerCapture(e.pointerId); } catch (_) {}
@@ -543,13 +544,29 @@ function initBeforeAfter() {
     slider.addEventListener('pointermove', (e) => {
       if (active) setPos(e.clientX);
     });
-    const release = (e) => {
+    const releasePointer = (e) => {
       if (!active) return;
       active = false;
       try { slider.releasePointerCapture(e.pointerId); } catch (_) {}
     };
-    slider.addEventListener('pointerup', release);
-    slider.addEventListener('pointercancel', release);
+    slider.addEventListener('pointerup', releasePointer);
+    slider.addEventListener('pointercancel', releasePointer);
+
+    // Touch events — fallback for older iOS Safari & Android browsers
+    // where pointer events on transformed/absolute children misbehave
+    slider.addEventListener('touchstart', (e) => {
+      if (!e.touches[0]) return;
+      active = true;
+      setPos(e.touches[0].clientX);
+    }, { passive: true });
+    slider.addEventListener('touchmove', (e) => {
+      if (!active || !e.touches[0]) return;
+      e.preventDefault();
+      setPos(e.touches[0].clientX);
+    }, { passive: false });
+    const releaseTouch = () => { active = false; };
+    slider.addEventListener('touchend', releaseTouch);
+    slider.addEventListener('touchcancel', releaseTouch);
   });
 }
 
