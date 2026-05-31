@@ -1,6 +1,6 @@
 /* ── ANIMATION OWNERSHIP CONTRACT — YYC Clean Touch ──
-   Stack: vanilla HTML/CSS/JS · GSAP + ScrollTrigger · native scroll · Three.js blob
-   Hero: P-14 (oversized text) + P-05 (organic blob, light, morphing)
+   Stack: vanilla HTML/CSS/JS · GSAP + ScrollTrigger · native scroll
+   Hero: P-14 (oversized text) + arch portal (scroll-pinned reveal)
    Site-wide scrub: 1.5 · Reveals: IntersectionObserver only
 */
 
@@ -28,123 +28,34 @@ function debounce(fn, ms) {
   return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
 
-// ── 5. WEBGL BLOB ──
-function initBlob() {
-  const canvas = document.getElementById('blobCanvas');
-  if (!canvas) return null;
-  if (isLowEnd || prefersReducedMotion) {
-    canvas.style.display = 'none';
-    return null;
+// ── 5. ARCH PORTAL (scroll-pinned reveal) ──
+function initPortal() {
+  const portal  = document.querySelector('.arch-portal');
+  const display = document.querySelector('.hero-display');
+  const before  = document.querySelector('.layer-before');
+  if (!portal) return;
+
+  // Mobile: skip pin/scroll animation, show static arch
+  if (isMobile || prefersReducedMotion) {
+    gsap.set(portal, { scale: 0.6 });
+    return;
   }
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x000000, 0);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.z = 4.5;
-
-  const geometry = new THREE.IcosahedronGeometry(1.4, isMobile ? 4 : 6);
-  const posAttr = geometry.attributes.position;
-  const originalPos = new Float32Array(posAttr.array);
-
-  const material = new THREE.MeshPhongMaterial({
-    color: 0xE8F1F7,
-    specular: 0x5B9EC9,
-    shininess: isMobile ? 40 : 80,
-    transparent: true,
-    opacity: 0.75,
-    wireframe: false,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambient);
-  const dirLight = new THREE.DirectionalLight(0x5B9EC9, 0.9);
-  dirLight.position.set(2, 3, 4);
-  scene.add(dirLight);
-  const fillLight = new THREE.DirectionalLight(0x0A2323, 0.3);
-  fillLight.position.set(-3, -1, -2);
-  scene.add(fillLight);
-
-  renderer.compile(scene, camera);
-
-  let frame = 0;
-  let rafId = null;
-
-  function morphBlob(time) {
-    const count = posAttr.count;
-    const t = time * 0.0008;
-    for (let i = 0; i < count; i++) {
-      const ox = originalPos[i * 3];
-      const oy = originalPos[i * 3 + 1];
-      const oz = originalPos[i * 3 + 2];
-      const distort = 0.18 * (
-        Math.sin(ox * 2.1 + t * 1.3) *
-        Math.cos(oy * 1.8 + t * 0.9) +
-        Math.sin(oz * 2.4 + t * 1.1) * 0.5
-      );
-      posAttr.setXYZ(i, ox + ox * distort, oy + oy * distort, oz + oz * distort);
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#hero',
+      start: 'top top',
+      end: '+=150%',
+      pin: true,
+      scrub: 1,
     }
-    posAttr.needsUpdate = true;
-    geometry.computeVertexNormals();
-  }
-
-  function animate(time) {
-    rafId = requestAnimationFrame(animate);
-    frame++;
-    const skip = isMobile ? frame % 2 !== 0 : false;
-    if (skip) return;
-    if (currentScrollProgress < 0.05) {
-      morphBlob(time);
-      mesh.rotation.y += 0.002;
-      mesh.rotation.x += 0.0005;
-    }
-    renderer.render(scene, camera);
-  }
-
-  const heroObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        if (!rafId) rafId = requestAnimationFrame(animate);
-      } else {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-      }
-    });
-  });
-  heroObs.observe(document.getElementById('hero'));
-
-  gsap.fromTo(mesh.scale, { x: 1, y: 1, z: 1 }, {
-    x: 1.3, y: 1.3, z: 1.3,
-    scrollTrigger: { trigger: '#hero', start: 'top top', end: '30% top', scrub: 1.5, overwrite: 'auto' }
-  });
-  gsap.fromTo(canvas, { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power2.out', delay: 0.3 });
-  gsap.to(canvas, {
-    opacity: 0,
-    scrollTrigger: { trigger: '#hero', start: '25% top', end: '40% top', scrub: 1.5, overwrite: 'auto' }
   });
 
-  const onResize = debounce(() => {
-    if (window.scrollY < 100) {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      ScrollTrigger.refresh();
-    }
-  }, 150);
-  window.addEventListener('resize', onResize);
-
-  window.addEventListener('beforeunload', () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    geometry.dispose();
-    material.dispose();
-    renderer.dispose();
-  });
-
-  return mesh;
+  // 0 → 1: arch grows to fill viewport, hero-display fades out
+  tl.to(portal,  { scale: 1, borderRadius: '0px', duration: 1, ease: 'none' }, 0);
+  tl.to(display, { opacity: 0, duration: 1, ease: 'none' }, 0);
+  // 0.3 → 1: before image fades out, revealing the after image
+  tl.to(before,  { opacity: 0, duration: 0.7, ease: 'none' }, 0.3);
 }
 
 // ── 6. HERO DISPLAY DRIFT ──
@@ -624,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initNav();
-    initBlob();
+    initPortal();
     initDisplayDrift();
     initHeroEntrance();
     initStatsCounter();

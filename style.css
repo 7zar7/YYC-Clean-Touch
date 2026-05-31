@@ -165,13 +165,28 @@ h1 em, h2 em { font-style: italic; color: var(--accent); }
   overflow: hidden;
   background: var(--bg);
 }
-#blobCanvas {
+.portal-wrapper {
   position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: var(--z-canvas);
-  pointer-events: none !important;
-  opacity: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+  pointer-events: none;
 }
+.arch-portal {
+  width: 100vw; height: 100vh;
+  transform: scale(0.32);
+  border-radius: 250px 250px 0 0;
+  overflow: hidden;
+  will-change: transform, border-radius;
+  position: relative;
+}
+.portal-layer {
+  position: absolute; inset: 0;
+  width: 100vw; height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+.layer-before { z-index: 2; will-change: opacity; }
+.layer-after  { z-index: 1; }
 .hero-display {
   position: absolute;
   z-index: var(--z-display);
@@ -894,7 +909,6 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
-  #blobCanvas { display: none; }
   @keyframes rotateBadge { to { transform: none; } }
 }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
