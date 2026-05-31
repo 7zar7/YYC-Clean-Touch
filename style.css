@@ -638,6 +638,7 @@ h2 em { font-style: italic; color: var(--accent); }
 }
 .detailing-card:hover { background: rgba(255,255,255,0.08); }
 .detailing-card--featured { background: rgba(91,158,201,0.15); border-color: rgba(91,158,201,0.4); }
+.detailing-card-img { width:100%; height:180px; object-fit:cover; border-radius: var(--r-md) var(--r-md) 0 0; margin:-2.5rem -2rem 1.5rem; width:calc(100% + 4rem); }
 .detailing-icon { font-size: 2rem; }
 .detailing-card h3 { color: var(--white); font-size: 1.3rem; }
 .detailing-card p { font-size: 0.9rem; color: rgba(255,255,255,0.6); }
