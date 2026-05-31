@@ -136,11 +136,14 @@ h2 em { font-style: italic; color: var(--accent); }
   transform: translateY(-1px);
 }
 .nav-cta {
-  background: var(--accent); color: var(--white) !important;
-  padding: 9px 22px; border-radius: var(--r-pill); font-size: 0.85rem !important;
+  background: rgba(10, 35, 35, 0.85);
+  color: #fff !important;
+  padding: 9px 22px;
+  border-radius: var(--r-pill);
+  font-size: 0.85rem !important;
   transition: background 0.2s, transform 0.2s !important;
 }
-.nav-cta:hover { background: var(--accent-dark) !important; transform: translateY(-1px); }
+.nav-cta:hover { background: rgba(10, 35, 35, 1); transform: translateY(-1px); }
 .nav-burger { display: none; flex-direction: column; gap: 5px; padding: 4px; }
 .nav-burger span {
   display: block; width: 22px; height: 1.5px;
@@ -241,14 +244,16 @@ h2 em { font-style: italic; color: var(--accent); }
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--r-pill);
-  padding: 7px 16px 7px 10px;
-  font-size: 0.82rem; color: var(--text-muted);
+  padding: 8px 20px;
+  font-size: 0.82rem; color: var(--text);
+  font-weight: 500;
   opacity: 0;
+  box-shadow: 0 4px 16px rgba(10, 35, 35, 0.06);
 }
 .badge-dot {
   width: 7px; height: 7px; border-radius: 50%;
@@ -988,6 +993,26 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
   #hero { align-items: flex-start; min-height: auto; }
   .hero-content { padding-top: 120px; }
   .hero-display { font-size: clamp(80px, 22vw, 140px); }
+
+  /* Mobile: drop the duplicate primary CTA from hero (sticky bar + nav pill cover conversion) */
+  .hero-actions .btn-primary { display: none; }
+
+  /* Mobile: animated shimmer behind the stats bar for a subtle "wow" */
+  .hero-stats { position: relative; isolation: isolate; }
+  .hero-stats::before {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--bg-alt) 0%, #fff 50%, var(--bg-alt) 100%);
+    background-size: 200% 100%;
+    animation: hero-stats-shimmer 3s ease-in-out infinite;
+    opacity: 0.55;
+  }
+  @keyframes hero-stats-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
 
   /* Stats bar on mobile: 2x2 grid with proper inner borders.
      The 3 dividers between stats are display:none but still count in
