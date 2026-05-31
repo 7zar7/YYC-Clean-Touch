@@ -734,8 +734,10 @@ h2 em { font-style: italic; color: var(--accent); }
 .section-editorial { overflow: hidden; }
 .editorial-split {
   display: grid; grid-template-columns: 1fr 1fr;
+  align-items: start;
   min-height: 600px; max-width: var(--max-w); margin: 0 auto;
 }
+.editorial-cta { text-align: center; padding: 2rem 0 4rem; }
 .editorial-text {
   padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem);
   display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;
@@ -747,6 +749,7 @@ h2 em { font-style: italic; color: var(--accent); }
 .editorial-image {
   position: relative; overflow: visible;
   margin-right: -100px;
+  padding-top: clamp(2rem, 4vw, 4rem);
 }
 .editorial-image-inner {
   position: absolute; inset: 0; right: 0;
