@@ -523,6 +523,36 @@ function initCalculator() {
   }
 })();
 
+// ── 15.5 BEFORE / AFTER SLIDERS ──
+function initBeforeAfter() {
+  document.querySelectorAll('[data-ba-slider]').forEach(slider => {
+    let active = false;
+
+    const setPos = (clientX) => {
+      const rect = slider.getBoundingClientRect();
+      if (!rect.width) return;
+      const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+      slider.style.setProperty('--ba', (x / rect.width) * 100 + '%');
+    };
+
+    slider.addEventListener('pointerdown', (e) => {
+      active = true;
+      try { slider.setPointerCapture(e.pointerId); } catch (_) {}
+      setPos(e.clientX);
+    });
+    slider.addEventListener('pointermove', (e) => {
+      if (active) setPos(e.clientX);
+    });
+    const release = (e) => {
+      if (!active) return;
+      active = false;
+      try { slider.releasePointerCapture(e.pointerId); } catch (_) {}
+    };
+    slider.addEventListener('pointerup', release);
+    slider.addEventListener('pointercancel', release);
+  });
+}
+
 // ── 16. INIT SEQUENCE ──
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.hero-h1, .hero-sub, .hero-badge').forEach(el => {
@@ -544,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     initBookingForm();
     initCalculator();
+    initBeforeAfter();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
