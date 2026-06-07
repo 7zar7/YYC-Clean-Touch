@@ -558,6 +558,7 @@ h2 em { font-style: italic; color: var(--accent); }
   color: var(--white);
 }
 .calc-row--hidden { display: none; }
+.calc-freq--onetime-only .calc-opt:not([data-freq="onetime"]) { display: none; }
 .calc-fine-print { font-size: 0.78rem; color: var(--text-light); font-style: italic; text-align: center; margin-top: 1rem; max-width: 560px; margin-left: auto; margin-right: auto; }
 
 /* ── STICKY CTA BAR ── */
@@ -955,6 +956,7 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
     -webkit-backdrop-filter: blur(8px);
     height: 56px;
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
     padding: 0 1.25rem;
@@ -970,7 +972,16 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
     font-size: 1rem;
   }
   .nav-burger { display: flex; }
-  .mobile-menu { display: block; }
+  .mobile-menu {
+    display: block;
+    top: 56px;
+    visibility: hidden;
+    transition: transform 0.35s var(--ease-out), visibility 0s linear 0.35s;
+  }
+  .mobile-menu.open {
+    visibility: visible;
+    transition: transform 0.35s var(--ease-out), visibility 0s linear 0s;
+  }
 
   .hero-badge {
     background: rgba(10, 35, 35, 0.08);

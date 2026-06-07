@@ -403,8 +403,10 @@ function initCalculator() {
 
   function applyTypeMode(type) {
     const showFreq = type === 'regular' || type === 'deep';
+    const forceOnetime = type !== 'regular';
     document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', !showFreq);
-    if (!showFreq) {
+    document.getElementById('calcFreq')?.classList.toggle('calc-freq--onetime-only', type === 'deep');
+    if (forceOnetime) {
       state.freq = 'onetime';
       document.querySelectorAll('#calcFreq .calc-opt').forEach(b => {
         b.classList.toggle('calc-opt--active', b.dataset.freq === 'onetime');
