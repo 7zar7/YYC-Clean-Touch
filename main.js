@@ -402,9 +402,9 @@ function initCalculator() {
   }
 
   function applyTypeMode(type) {
-    const isRegular = type === 'regular';
-    document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', !isRegular);
-    if (!isRegular) {
+    const showFreq = type === 'regular' || type === 'deep';
+    document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', !showFreq);
+    if (!showFreq) {
       state.freq = 'onetime';
       document.querySelectorAll('#calcFreq .calc-opt').forEach(b => {
         b.classList.toggle('calc-opt--active', b.dataset.freq === 'onetime');
