@@ -234,6 +234,8 @@ function initSmoothScroll() {
 function initBookingForm() {
   const form = document.getElementById('bookingForm');
   const confirm = document.getElementById('formConfirm');
+  const actions = document.getElementById('bookingActions');
+  const bookOnlineBtn = document.getElementById('btnBookOnline');
   if (!form || !confirm) return;
 
   const flagInvalid = (el) => {
@@ -242,12 +244,27 @@ function initBookingForm() {
     setTimeout(() => el.style.borderColor = '', 2000);
   };
 
+  if (bookOnlineBtn && actions) {
+    bookOnlineBtn.addEventListener('click', () => {
+      actions.classList.add('booking-actions--hidden');
+      form.classList.remove('booking-form--hidden');
+      if (!prefersReducedMotion) {
+        gsap.fromTo(form, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+      }
+      const firstField = document.getElementById('f-name');
+      if (firstField) firstField.focus();
+    });
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const contactEl = document.getElementById('f-contact');
-    const contact = contactEl.value.trim();
+    const nameEl = document.getElementById('f-name');
+    const phoneEl = document.getElementById('f-phone');
+    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
 
-    if (!contact) { flagInvalid(contactEl); return; }
+    if (!name) { flagInvalid(nameEl); return; }
+    if (!phone) { flagInvalid(phoneEl); return; }
 
     const reveal = () => {
       form.style.display = 'none';
@@ -273,23 +290,36 @@ function initCalculator() {
   const calc = document.getElementById('priceCalc');
   if (!calc) return;
 
-  // Pricing matrix (base prices per visit, one-time)
-  const BASE_PRICES = {
-    regular:          { 1: 119, 2: 149, 3: 179, 4: 209, 5: 239, 6: 269 },
-    deep:             { 1: 179, 2: 229, 3: 279, 4: 329, 5: 379, 6: 429 },
-    moveinout:        { 1: 199, 2: 259, 3: 319, 4: 379, 5: 439, 6: 499 },
-    postconstruction: { 1: 249, 2: 329, 3: 409, 4: 489, 5: 569, 6: 649 },
+  // Base price lookup by bedrooms-bathrooms (regular cleaning, one-time)
+  const PRICE_TABLE = {
+    '1-1': 149,
+    '2-1': 199,
+    '2-2': 249,
+    '3-2': 299,
+    '3-3': 349,
+    '4-3': 399,
+    '4-4': 449,
+    '5-4': 499,
+    '5-5': 549,
+    '6-6': 599,
   };
 
-  // Auto detailing — "starting from" prices
-  const AUTO_PRICES = {
-    interior: 120,
-    full:     220,
-    odour:    80,
-  };
+  function getBasePrice(bedrooms, bathrooms) {
+    const key = bedrooms + '-' + bathrooms;
+    if (PRICE_TABLE[key]) return PRICE_TABLE[key];
+    // Find closest match — nearest bedroom count
+    const keys = Object.keys(PRICE_TABLE);
+    const sorted = keys.filter(k => parseInt(k) <= bedrooms).sort();
+    return PRICE_TABLE[sorted[sorted.length - 1]] || 149;
+  }
 
-  // Bathroom surcharge per extra bathroom beyond 1
-  const BATHROOM_SURCHARGE = 30;
+  // Service type multipliers
+  const TYPE_MULTIPLIER = {
+    regular:          1.0,
+    deep:             1.6,
+    moveinout:        1.8,
+    postconstruction: 2.0,
+  };
 
   // Frequency discounts
   const FREQ_DISCOUNT = {
@@ -312,40 +342,25 @@ function initCalculator() {
     bedrooms: 2,
     bathrooms: 1,
     freq: 'monthly',
-    autoService: 'interior',
   };
 
   function calcPrice() {
-    if (state.type === 'auto') {
-      const final = AUTO_PRICES[state.autoService];
-      return { final, savedPerVisit: 0, discount: 0 };
-    }
-    const bedroomKey = Math.min(state.bedrooms, 6);
-    const base = BASE_PRICES[state.type][bedroomKey] || BASE_PRICES[state.type][6];
-    const bathroomAdd = Math.max(0, state.bathrooms - 1) * BATHROOM_SURCHARGE;
-    const subtotal = base + bathroomAdd;
+    const base = getBasePrice(state.bedrooms, state.bathrooms);
+    const subtotal = base * (TYPE_MULTIPLIER[state.type] || 1);
     const discount = FREQ_DISCOUNT[state.freq];
     const final = Math.round(subtotal * (1 - discount));
     const savedPerVisit = Math.round(subtotal * discount);
     return { final, savedPerVisit, discount };
   }
 
-  function setMode(type) {
-    const isAuto = type === 'auto';
-    document.getElementById('calcBedroomRow')?.classList.toggle('calc-row--hidden', isAuto);
-    document.getElementById('calcBathroomRow')?.classList.toggle('calc-row--hidden', isAuto);
-    document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', isAuto);
-    document.getElementById('calcAutoRow')?.classList.toggle('calc-row--hidden', !isAuto);
-  }
-
   function animatePrice(newVal) {
     const el = document.getElementById('calcPrice');
     if (!el) return;
-    if (prefersReducedMotion) { el.textContent = '$' + newVal; return; }
+    if (prefersReducedMotion) { el.textContent = 'From $' + newVal; return; }
     gsap.to(el, {
       opacity: 0, y: -8, duration: 0.15, ease: 'power2.in',
       onComplete: () => {
-        el.textContent = '$' + newVal;
+        el.textContent = 'From $' + newVal;
         gsap.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' });
       }
     });
@@ -356,13 +371,11 @@ function initCalculator() {
     animatePrice(final);
 
     const perEl = document.getElementById('calcPricePer');
-    if (perEl) perEl.textContent = state.type === 'auto' ? '· starting from' : FREQ_LABEL[state.freq];
+    if (perEl) perEl.textContent = FREQ_LABEL[state.freq];
 
     const savingsEl = document.getElementById('calcSavings');
     if (savingsEl) {
-      if (state.type === 'auto') {
-        savingsEl.innerHTML = '';
-      } else if (savedPerVisit > 0) {
+      if (savedPerVisit > 0) {
         savingsEl.innerHTML = `<span class="calc-saving-badge">You save $${savedPerVisit}/visit · ${Math.round(discount * 100)}% off</span>`;
       } else {
         savingsEl.innerHTML = '';
@@ -373,20 +386,28 @@ function initCalculator() {
     const ctaEl = document.getElementById('calcCta');
     if (ctaEl) {
       ctaEl.href = `#booking`;
-      ctaEl.textContent = state.type === 'auto' ? 'Book This Detail →' : 'Book This Clean →';
+      ctaEl.textContent = 'Book This Clean →';
       ctaEl.addEventListener('click', () => {
         // Pre-fill the service dropdown
         const serviceMap = {
           regular: 'regular', deep: 'deep',
           moveinout: 'movein', postconstruction: 'postconstruction'
         };
-        const autoMap = { interior: 'interior-detail', full: 'full-detail', odour: 'odour' };
         const serviceEl = document.getElementById('f-service');
         if (serviceEl) {
-          serviceEl.value = state.type === 'auto'
-            ? (autoMap[state.autoService] || '')
-            : (serviceMap[state.type] || '');
+          serviceEl.value = serviceMap[state.type] || '';
         }
+      });
+    }
+  }
+
+  function applyTypeMode(type) {
+    const isRegular = type === 'regular';
+    document.getElementById('calcFreqRow')?.classList.toggle('calc-row--hidden', !isRegular);
+    if (!isRegular) {
+      state.freq = 'onetime';
+      document.querySelectorAll('#calcFreq .calc-opt').forEach(b => {
+        b.classList.toggle('calc-opt--active', b.dataset.freq === 'onetime');
       });
     }
   }
@@ -398,18 +419,7 @@ function initCalculator() {
       typeContainer.querySelectorAll('.calc-opt').forEach(b => b.classList.remove('calc-opt--active'));
       btn.classList.add('calc-opt--active');
       state.type = btn.dataset.type;
-      setMode(state.type);
-      updateDisplay();
-    });
-  });
-
-  // Auto sub-service buttons
-  const autoContainer = document.getElementById('calcAuto');
-  autoContainer && autoContainer.querySelectorAll('.calc-opt').forEach(btn => {
-    btn.addEventListener('click', () => {
-      autoContainer.querySelectorAll('.calc-opt').forEach(b => b.classList.remove('calc-opt--active'));
-      btn.classList.add('calc-opt--active');
-      state.autoService = btn.dataset.auto;
+      applyTypeMode(state.type);
       updateDisplay();
     });
   });
@@ -447,7 +457,7 @@ function initCalculator() {
     updateDisplay();
   });
   document.getElementById('bathroomPlus') && document.getElementById('bathroomPlus').addEventListener('click', () => {
-    if (state.bathrooms >= 4) return;
+    if (state.bathrooms >= 6) return;
     state.bathrooms++;
     document.getElementById('bathroomCount').textContent = state.bathrooms;
     updateDisplay();
@@ -476,8 +486,8 @@ function initPlansTabs() {
 
   const PLAN_DATA = {
     bronze: { name: 'Bronze', freq: 'Monthly',   price: '$149' },
-    silver: { name: 'Silver', freq: 'Bi-Weekly', price: '$129' },
-    gold:   { name: 'Gold',   freq: 'Weekly',    price: '$109' },
+    silver: { name: 'Silver', freq: 'Bi-Weekly', price: '$139' },
+    gold:   { name: 'Gold',   freq: 'Weekly',    price: '$129' },
   };
 
   function setActive(planId) {
@@ -576,6 +586,18 @@ function initBeforeAfter() {
   });
 }
 
+// ── 15.5 DETAILING TOGGLE ──
+function initDetailingToggle() {
+  document.getElementById('detailingToggleBtn')?.addEventListener('click', () => {
+    const panel = document.getElementById('detailing-panel');
+    const btn = document.getElementById('detailingToggleBtn');
+    const isOpen = panel.style.display === 'block';
+    panel.style.display = isOpen ? 'none' : 'block';
+    btn.textContent = isOpen ? 'See Auto Detailing →' : 'Hide Detailing ↑';
+    if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 // ── 16. INIT SEQUENCE ──
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.hero-h1, .hero-sub, .hero-badge').forEach(el => {
@@ -601,6 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initBeforeAfter();
     initStickyCTA();
     initPlansTabs();
+    initDetailingToggle();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
