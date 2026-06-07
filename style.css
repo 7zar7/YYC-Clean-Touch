@@ -15,12 +15,13 @@
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'DM Sans', system-ui, sans-serif;
 
-  --z-canvas:   0;
-  --z-display:  1;
-  --z-content:  3;
-  --z-nav:      100;
-  --z-mobile:   200;
-  --z-grain:    999;
+  --z-canvas:     0;
+  --z-display:    1;
+  --z-content:    3;
+  --z-sticky-cta: 95;
+  --z-nav:        100;
+  --z-mobile:     200;
+  --z-grain:      999;
 
   --r-sm:   6px;
   --r-md:   12px;
@@ -144,6 +145,8 @@ h2 em { font-style: italic; color: var(--accent); }
   transition: background 0.2s, transform 0.2s !important;
 }
 .nav-cta:hover { background: rgba(10, 35, 35, 1); transform: translateY(-1px); }
+
+.nav-cta-mobile-fixed { display: none; }
 .nav-burger { display: none; flex-direction: column; gap: 5px; padding: 4px; }
 .nav-burger span {
   display: block; width: 22px; height: 1.5px;
@@ -941,17 +944,72 @@ blockquote { padding: 0.75rem 1.5rem 1rem; font-size: 0.9rem; color: var(--text-
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  /* Nav: burger only — hide everything else (including CTA pill) */
+  /* Nav: burger + logo only — hide CTA pill */
   .nav-links { display: none; }
-  .nav-cta   { display: none; } /* explicit safeguard */
+  .nav-cta   { display: none !important; }
+  .nav-logo  { display: flex !important; }
   .nav-burger { display: flex; }
   .mobile-menu { display: block; }
+
+  .hero-badge {
+    background: rgba(10, 35, 35, 0.08);
+    border-left: 3px solid var(--bg-dark);
+    border-radius: var(--r-sm);
+    color: var(--text);
+  }
+
+  .hero-h1  { margin-bottom: 1.5rem; }
+  .hero-sub { margin-top: 1rem; }
+
+  .nav-cta-mobile-fixed {
+    display: inline-block;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: var(--z-sticky-cta);
+    background: #5B9EC9;
+    color: white;
+    border-radius: var(--r-pill);
+    padding: 14px 24px;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(91,158,201,0.5);
+    text-decoration: none;
+  }
+
+  .hero-marquee { margin-top: 1.5rem; }
 
   /* Hero: hide arch portal, restore normal top-down flow */
   .portal-wrapper { display: none; }
   #hero { align-items: flex-start; min-height: auto; }
   .hero-content { padding-top: 120px; }
-  .hero-display { font-size: clamp(80px, 22vw, 140px); }
+  .hero-display {
+    position: relative;
+    top: auto; left: auto;
+    transform: none;
+    font-size: clamp(60px, 18vw, 100px);
+    color: rgba(10,35,35,0.06);
+    align-self: center;
+    margin: 0.5rem 0;
+  }
+
+  .hero-content { display: flex; flex-direction: column; }
+  .hero-stats   { order: 4; }
+  .hero-marquee { order: 5; }
+  .hero-display { order: 6; }
+
+  .dust-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='dust'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23dust)' opacity='0.12'/%3E%3C/svg%3E");
+    background-size: cover;
+  }
+  .dust-overlay.cleared {
+    opacity: 0;
+  }
 
   /* Mobile: drop the duplicate primary CTA from hero (sticky bar + nav pill cover conversion) */
   .hero-actions .btn-primary { display: none; }

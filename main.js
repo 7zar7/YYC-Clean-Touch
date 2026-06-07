@@ -598,6 +598,22 @@ function initDetailingToggle() {
   });
 }
 
+// ── 15b. DUST OVERLAY (mobile only) ──
+function initDustOverlay() {
+  const dustOverlay = document.getElementById('dustOverlay');
+  if (dustOverlay && window.innerWidth < 768) {
+    let cleared = false;
+    const clearDust = () => {
+      if (!cleared) {
+        cleared = true;
+        dustOverlay.classList.add('cleared');
+      }
+    };
+    window.addEventListener('scroll', clearDust, { passive: true });
+    document.addEventListener('touchstart', clearDust, { once: true, passive: true });
+  }
+}
+
 // ── 16. INIT SEQUENCE ──
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.hero-h1, .hero-sub, .hero-badge').forEach(el => {
@@ -624,6 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initStickyCTA();
     initPlansTabs();
     initDetailingToggle();
+    initDustOverlay();
 
     ScrollTrigger.config({ ignoreMobileResize: true });
     ScrollTrigger.normalizeScroll(!isSafari && !isMobile);
